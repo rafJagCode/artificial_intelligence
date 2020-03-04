@@ -9,7 +9,7 @@
     <Grid>
         <Button Content="Generate" Click="generate_data" HorizontalAlignment="Left" Margin="114,87,0,0" VerticalAlignment="Top" Width="200"/>
         <Button Content="Bubble Sort" Click="bubble_click" HorizontalAlignment="Left" Margin="114,128,0,0" VerticalAlignment="Top" Width="200"/>
-        <Grid x:Name="line_display" HorizontalAlignment="Left" Height="200" Margin="380,128,0,0" VerticalAlignment="Top" Width="408"/>
+        <Grid x:Name="line_display" HorizontalAlignment="Left" Height="200" Margin="356,87,0,0" VerticalAlignment="Top" Width="408"/>
         <Button Content="Insertion Sort" Click="insertion_click" HorizontalAlignment="Left" Margin="114,173,0,0" VerticalAlignment="Top" Width="200"/>
         <Button Content="Choosing Sort" Click="choosing_click" HorizontalAlignment="Left" Margin="114,216,0,0" VerticalAlignment="Top" Width="200"/>
         <Button Content="Counting Sort" Click="counting_click" HorizontalAlignment="Left" Margin="114,262,0,0" VerticalAlignment="Top" Width="200"/>

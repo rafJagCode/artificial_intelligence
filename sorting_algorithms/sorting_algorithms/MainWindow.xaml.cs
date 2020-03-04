@@ -23,29 +23,36 @@ namespace sorting_algorithms
         int n = 50;
         int speed = 100;
         int range = 150;
+        bool thread_started = false;
+        bool sorted = false;
         List<Line> lines = new List<Line>();
         public MainWindow()
         {
             InitializeComponent();
         }
         private void generate_data(object sender, RoutedEventArgs e)
-        { 
-            line_display.Children.Clear();
-            lines.Clear();
-            Random rnd = new Random();
-            for (int i = 0; i < n; i++)
+        {
+            if (!thread_started)
             {
-                Line objLine = new Line();
-                objLine.Stroke = System.Windows.Media.Brushes.Black;
-                objLine.Fill = System.Windows.Media.Brushes.Black;
-                objLine.StrokeThickness = 2;
-                objLine.X1 = 8 + i * 8;
-                objLine.X2 = objLine.X1;
-                objLine.Y1 = line_display.ActualHeight;
-                objLine.Y2 = rnd.Next(1, range);
-                lines.Add(objLine);
+                line_display.Children.Clear();
+                lines.Clear();
+                Random rnd = new Random();
+                for (int i = 0; i < n; i++)
+                {
+                    Line objLine = new Line();
+                    objLine.Stroke = System.Windows.Media.Brushes.Black;
+                    objLine.Fill = System.Windows.Media.Brushes.Black;
+                    objLine.StrokeThickness = 2;
+                    objLine.X1 = 8 + i * 8;
+                    objLine.X2 = objLine.X1;
+                    objLine.Y1 = line_display.ActualHeight;
+                    objLine.Y2 = rnd.Next(1, range);
+                    lines.Add(objLine);
+                }
+                draw_lines(lines);
+                sorted = false;
             }
-            draw_lines(lines);
+            else System.Windows.MessageBox.Show("Inny wątek jest aktualnie aktywny");
         }
         public void draw_lines(List<Line> lines)
         {
@@ -66,7 +73,16 @@ namespace sorting_algorithms
         private void bubble_click(object sender, RoutedEventArgs e)
         {
             Thread t = new Thread(new ThreadStart(bubble_sort));
-            t.Start();
+            if (!t.IsAlive && !thread_started)
+            {
+                if (sorted) System.Windows.MessageBox.Show("Wygeneruj nowe dane do posortowania");
+                else
+                {
+                    thread_started = true;
+                    t.Start();
+                }
+            }
+            else System.Windows.MessageBox.Show("Inny wątek jest aktualnie aktywny");
         }
         private void bubble_sort()
         {
@@ -79,21 +95,50 @@ namespace sorting_algorithms
                     if (result) Dispatcher.Invoke(new Action(() => { swap(lines, j, j - 1); }));
                     Dispatcher.Invoke( new Action( () => { draw_lines(lines); }));
                 }
+            thread_started = false;
+            sorted = true;
         }
         private void insertion_click(object sender, RoutedEventArgs e)
         {
             Thread t = new Thread(new ThreadStart(insertion_sort));
-            t.Start();
+            if (!t.IsAlive && !thread_started)
+            {
+                if (sorted) System.Windows.MessageBox.Show("Wygeneruj nowe dane do posortowania");
+                else
+                {
+                    thread_started = true;
+                    t.Start();
+                }
+            }
+            else System.Windows.MessageBox.Show("Inny wątek jest aktualnie aktywny");
         }
         private void choosing_click(object sender, RoutedEventArgs e)
         {
             Thread t = new Thread(new ThreadStart(choosing_sort));
-            t.Start();
+            if (!t.IsAlive && !thread_started)
+            {
+                if (sorted) System.Windows.MessageBox.Show("Wygeneruj nowe dane do posortowania");
+                else
+                {
+                    thread_started = true;
+                    t.Start();
+                }
+            }
+            else System.Windows.MessageBox.Show("Inny wątek jest aktualnie aktywny");
         }
         private void counting_click(object sender, RoutedEventArgs e)
         {
             Thread t = new Thread(new ThreadStart(couting_sort));
-            t.Start();
+            if (!t.IsAlive && !thread_started)
+            {
+                if (sorted) System.Windows.MessageBox.Show("Wygeneruj nowe dane do posortowania");
+                else
+                {
+                    thread_started = true;
+                    t.Start();
+                }
+            }
+            else System.Windows.MessageBox.Show("Inny wątek jest aktualnie aktywny");
         }
         private void insertion_sort()
         {
@@ -111,6 +156,8 @@ namespace sorting_algorithms
                 lines[j] = temp;
             }
             Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
+            thread_started = false;
+            sorted = true;
         }
         private void choosing_sort()
         {
@@ -122,6 +169,8 @@ namespace sorting_algorithms
                 Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
                 Thread.Sleep(speed);
             }
+            thread_started = false;
+            sorted = true;
         }
         private void couting_sort()
         {
@@ -144,9 +193,10 @@ namespace sorting_algorithms
                     Thread.Sleep(speed);
                     j++;
                     count[i]--;
-                    //Dispatcher.Invoke(new Action(() => { draw_lines(lines); }));
                 }
             }
+            thread_started = false;
+            sorted = true;
         }
         void increment(List<int> count, List<Line> lines, int i)
         {
