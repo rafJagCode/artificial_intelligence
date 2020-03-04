@@ -22,6 +22,7 @@ namespace sorting_algorithms
     {
         int n = 50;
         int speed = 100;
+        int range = 150;
         List<Line> lines = new List<Line>();
         public MainWindow()
         {
@@ -41,7 +42,7 @@ namespace sorting_algorithms
                 objLine.X1 = 8 + i * 8;
                 objLine.X2 = objLine.X1;
                 objLine.Y1 = line_display.ActualHeight;
-                objLine.Y2 = rnd.Next(1, 150);
+                objLine.Y2 = rnd.Next(1, range);
                 lines.Add(objLine);
             }
             draw_lines(lines);
@@ -89,6 +90,11 @@ namespace sorting_algorithms
             Thread t = new Thread(new ThreadStart(choosing_sort));
             t.Start();
         }
+        private void counting_click(object sender, RoutedEventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(couting_sort));
+            t.Start();
+        }
         private void insertion_sort()
         {
             for (int i = 0; i < n; i++)
@@ -116,6 +122,35 @@ namespace sorting_algorithms
                 Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
                 Thread.Sleep(speed);
             }
+        }
+        private void couting_sort()
+        {
+            int j = 0;
+            List<int>count = new List<int>();
+            for (int i = 0; i < range+ 1; i++)
+            {
+                count.Add(0);
+            }
+            for (int i = 0; i < n; i++)
+            {
+                Dispatcher.Invoke(new Action(() => { increment(count, lines, i); }));
+                
+            }
+            for (int i = 0; i < range+ 1; i++)
+            {
+                while (count[i] > 0)
+                {
+                    Dispatcher.Invoke(() => { lines[j].Y2 = i; });
+                    Thread.Sleep(speed);
+                    j++;
+                    count[i]--;
+                    //Dispatcher.Invoke(new Action(() => { draw_lines(lines); }));
+                }
+            }
+        }
+        void increment(List<int> count, List<Line> lines, int i)
+        {
+            count[(int)lines[i].Y2]++;
         }
         int find_min(List<Line>lines, int start)
         {
