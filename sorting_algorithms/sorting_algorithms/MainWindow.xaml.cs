@@ -21,7 +21,7 @@ namespace sorting_algorithms
     public partial class MainWindow : Window
     {
         int n = 50;
-        int speed = 5;
+        int speed = 100;
         List<Line> lines = new List<Line>();
         public MainWindow()
         {
@@ -84,6 +84,11 @@ namespace sorting_algorithms
             Thread t = new Thread(new ThreadStart(insertion_sort));
             t.Start();
         }
+        private void choosing_click(object sender, RoutedEventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(choosing_sort));
+            t.Start();
+        }
         private void insertion_sort()
         {
             for (int i = 0; i < n; i++)
@@ -100,6 +105,31 @@ namespace sorting_algorithms
                 lines[j] = temp;
             }
             Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
+        }
+        private void choosing_sort()
+        {
+            int min;
+            for (int i = 0; i < n; i++)
+            {
+                min = find_min(lines, i);
+                swap(lines, i, min);
+                Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
+                Thread.Sleep(speed);
+            }
+        }
+        int find_min(List<Line>lines, int start)
+        {
+            Line tmp = lines[start];
+            int result = start;
+            for (int i = start + 1; i < n; i++)
+            {
+                if (Dispatcher.Invoke(new Func<bool>(() => { return is_smaller(lines[i], tmp); })))
+                {
+                    tmp = lines[i];
+                    result = i;
+                }
+            }
+            return result;
         }
         public bool is_decreasing(List<Line> lines, int j)
         {
