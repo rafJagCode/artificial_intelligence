@@ -20,8 +20,8 @@ namespace sorting_algorithms
 
     public partial class MainWindow : Window
     {
-        int n = 8;
-        int speed = 300;
+        int n = 50;
+        int speed = 5;
         List<Line> lines = new List<Line>();
         public MainWindow()
         {
@@ -69,26 +69,65 @@ namespace sorting_algorithms
         }
         private void bubble_sort()
         {
+            bool result;
             for (int i = 1; i < n; i++)
                 for (int j = n - 1; j >= i; j--)
                 {
                     Thread.Sleep(speed);
-                    Dispatcher.Invoke(new Action(() => { decide_whether_to_change_order(lines, j); }));
+                    result = Dispatcher.Invoke(new Func<bool>(() => {return is_decreasing(lines, j);}));
+                    if (result) Dispatcher.Invoke(new Action(() => { swap(lines, j, j - 1); }));
                     Dispatcher.Invoke( new Action( () => { draw_lines(lines); }));
                 }
         }
-        public void decide_whether_to_change_order(List<Line> lines, int j)
+        private void insertion_click(object sender, RoutedEventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(insertion_sort));
+            t.Start();
+        }
+        private void insertion_sort()
+        {
+            for (int i = 0; i < n; i++)
+            {
+                int j = i;
+                Line temp = lines[j];
+                while ((j > 0) && Dispatcher.Invoke(new Func<bool>(() => { return is_smaller(temp, lines[j-1]); })))
+                {
+                    lines[j] = lines[j - 1];
+                    j--;
+                    Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
+                    Thread.Sleep(speed);
+                }
+                lines[j] = temp;
+            }
+            Dispatcher.Invoke(new Action(() => { draw_lines_socond(lines); }));
+        }
+        public bool is_decreasing(List<Line> lines, int j)
         {
             if (lines[j].Y2 < lines[j - 1].Y2)
-            {
-                swap(lines, j, j - 1);
-            }
+                return true;
+            return false;
+        }
+        public bool is_smaller (Line a, Line b)
+        {
+            if (a.Y2 < b.Y2) return true;
+            return false;
         }
         private void swap(List<Line> lines, int index1, int index2)
         {
             Line temp = lines[index1];
             lines[index1] = lines[index2];
             lines[index2] = temp;
+        }
+        private void change(List<Line>lines, int j)
+        {
+            lines[j + 1] = lines[j];
+        }
+        public void draw_lines_socond(List<Line>lines)
+        {
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].X1 = lines[i].X2 = 8 + i * 8;
+            }
         }
     }
 }
