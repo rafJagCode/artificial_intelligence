@@ -48,12 +48,13 @@ namespace graph_first
 
             public void createBranches(Node root)
             {
-                if ((root!=null)&&(root.value >= 7)) return;
+                if ((root!=null)&&(root.value >= 21)) return;
                 Node newRoot = root;
                 Node tmp;
+                int id;
                 int value;
-                string player;
                 int result = 2;
+                string player;
                 if (newRoot == null)
                 {
                     newRoot = new Node(0, 0);
@@ -65,9 +66,10 @@ namespace graph_first
                 for (int i = 0; i < 3; i++)
                 {
                     value = newRoot.value + 4 + i;
-                    if ((value > 7) && (player == "prot")) result = 1;
-                    else if ((value > 7) && (player == "ant")) result = 3;
-                    tmp = new Node(newRoot.number+1+i, value, player, result, newRoot);
+                    if ((value > 21) && (player == "prot")) result = 1;
+                    else if ((value > 21) && (player == "ant")) result = 3;
+                    id = newRoot.id * 10 + 1 + i;
+                    tmp = new Node(id, value, player, result, newRoot);
                     this.addNode(tmp);
                     this.addEdge(new Edge(newRoot, tmp, 4 + i));
                     this.createBranches(tmp);
@@ -84,14 +86,11 @@ namespace graph_first
             }
             public void treeAsString()
             {
-                int i=0;
+                
                 string result = "";
-                string firstValues = this.edges[i].begin.value == 0 ? this.edges[i].value.ToString() : this.edges[i].begin.value.ToString() + this.edges[i].value;
-                for (i = 0; i < this.edges.Count(); i++)
+                for (int i = 0; i < this.edges.Count(); i++)
                 {
-                    result += "\"" +this.edges[i].begin.player + ";\\n "+ this.edges[i].begin.value + ";\\n wynik= " + this.edges[i].begin.result +
-                        "\" -> \"" + this.edges[i].end.player + ";\\n " + this.edges[i].begin.value+"+"+this.edges[i].value + ";\\n wynik= " + this.edges[i].end.result+"\" " +
-                        "[label = \"" + this.edges[i].value + "\"];\n";
+                    result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value + "\"];\n";
                 }
                 Console.WriteLine(result);
             }
@@ -100,13 +99,13 @@ namespace graph_first
         {
             public Node ancestor { get; set; }
             public string player { get; set; }
-            public int number { get; set; }
+            public int id { get; set; }
             public int value { get; set; }
             public int result { get; set; } //1: przegrana 2: remis 3: wygrana
 
-            public Node(int _number, int _value, string _player = "prot", int _result = 2, Node _ancestor=null)
+            public Node(int _id, int _value, string _player = "prot", int _result = 2, Node _ancestor=null)
             {
-                number=_number;
+                id=_id;
                 value=_value;
                 player = _player;
                 result = _result;
@@ -114,11 +113,11 @@ namespace graph_first
             }
             public void print()
             {
-                Console.WriteLine(this.number + "=>" + this.value + "=>" + this.player + "=>" + this.result);
+                Console.WriteLine(this.id + "=>" + this.value + "=>" + this.player + "=>" + this.result);
             }
             public string nodeAsString()
             {
-                return this.number + "=>" + this.value + "=>" + this.player + "=>" + this.result;
+                return "\"node id: " + id + "\\n current player: " + player + "\\n current score: " + value + "\\n result: " + result + "\"";
             }
 
         }
