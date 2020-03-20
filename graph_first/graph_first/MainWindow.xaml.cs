@@ -48,7 +48,7 @@ namespace graph_first
 
             public void createBranches(Node root)
             {
-                if ((root!=null)&&(root.value >= 7)) return;
+                if ((root!=null)&&(root.value >= 21)) return;
                 Node newRoot = root;
                 Node tmp;
                 int id;
@@ -66,8 +66,8 @@ namespace graph_first
                 for (int i = 0; i < 3; i++)
                 {
                     value = newRoot.value + 4 + i;
-                    if ((value > 7) && (player == "prot")) result = 1;
-                    else if ((value > 7) && (player == "ant")) result = 3;
+                    if ((value > 21) && (player == "prot")) result = 1;
+                    else if ((value > 21) && (player == "ant")) result = 3;
                     id = newRoot.id * 10 + 1 + i;
                     tmp = new Node(id, value, player, result, newRoot);
                     this.addNode(tmp);
@@ -90,9 +90,7 @@ namespace graph_first
                 string result = "";
                 for (int i = 0; i < this.edges.Count(); i++)
                 {
-                    result += "\"" + this.edges[i].begin.id + ";\\n " + this.edges[i].begin.player + ";\\n " + this.edges[i].begin.value + ";\\n wynik= " + this.edges[i].begin.result +
-                        "\" -> \"" + this.edges[i].end.id + ";\\n " + this.edges[i].end.player + ";\\n " + this.edges[i].end.value + ";\\n wynik= " + this.edges[i].end.result+"\" " +
-                        "[label = \"" + this.edges[i].value + "\"];\n";
+                    result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value + "\"];\n";
                 }
                 Console.WriteLine(result);
             }
@@ -119,7 +117,7 @@ namespace graph_first
             }
             public string nodeAsString()
             {
-                return this.id + "=>" + this.value + "=>" + this.player + "=>" + this.result;
+                return "\"node id: " + id + "\\n current player: " + player + "\\n current score: " + value + "\\n result: " + result + "\"";
             }
 
         }
