@@ -48,7 +48,7 @@ namespace graph_first
 
             public void createBranches(Node root)
             {
-                if ((root!=null)&&(root.value >= 7)) return;
+                if ((root!=null)&&(root.value >= 10)) return;
                 Node newRoot = root;
                 Node tmp;
                 int value;
@@ -65,8 +65,8 @@ namespace graph_first
                 for (int i = 0; i < 3; i++)
                 {
                     value = newRoot.value + 4 + i;
-                    if ((value > 7) && (player == "prot")) result = 1;
-                    else if ((value > 7) && (player == "ant")) result = 3;
+                    if ((value > 10) && (player == "prot")) result = 1;
+                    else if ((value > 10) && (player == "ant")) result = 3;
                     tmp = new Node(newRoot.number+1+i, value, player, result, newRoot);
                     this.addNode(tmp);
                     this.addEdge(new Edge(newRoot, tmp, 4 + i));
@@ -84,13 +84,12 @@ namespace graph_first
             }
             public void treeAsString()
             {
-                int i=0;
+                
                 string result = "";
-                string firstValues = this.edges[i].begin.value == 0 ? this.edges[i].value.ToString() : this.edges[i].begin.value.ToString() + this.edges[i].value;
-                for (i = 0; i < this.edges.Count(); i++)
+                for (int i = 0; i < this.edges.Count(); i++)
                 {
-                    result += "\"" +this.edges[i].begin.player + ";\\n "+ this.edges[i].begin.value + ";\\n wynik= " + this.edges[i].begin.result +
-                        "\" -> \"" + this.edges[i].end.player + ";\\n " + this.edges[i].begin.value+"+"+this.edges[i].value + ";\\n wynik= " + this.edges[i].end.result+"\" " +
+                    result += "\"" +this.edges[i].begin.player + ";\\n "+ ((this.edges[i].begin.ancestor != null)&&(this.edges[i].begin.ancestor.number!=0) ? (this.edges[i].begin.ancestor.value.ToString() + "+" +(this.edges[i].begin.value - this.edges[i].begin.ancestor.value)) : this.edges[i].begin.value.ToString()) + ";\\n wynik= " + this.edges[i].begin.result +
+                        "\" -> \"" + this.edges[i].end.player + ";\\n " + (this.edges[i].begin.value == 0 ? this.edges[i].value.ToString() : this.edges[i].begin.value.ToString() + "+" + this.edges[i].value) + ";\\n wynik= " + this.edges[i].end.result+"\" " +
                         "[label = \"" + this.edges[i].value + "\"];\n";
                 }
                 Console.WriteLine(result);
