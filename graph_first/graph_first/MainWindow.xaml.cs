@@ -48,7 +48,7 @@ namespace graph_first
 
             public void createBranches(Node root)
             {
-                if ((root!=null)&&(root.value >= 21)) return;
+                if ((root!=null)&&(root.value >= 7)) return;
                 Node newRoot = root;
                 Node tmp;
                 int id;
@@ -66,9 +66,9 @@ namespace graph_first
                 for (int i = 0; i < 3; i++)
                 {
                     value = newRoot.value + 4 + i;
-                    if ((value > 21) && (player == "prot")) result = 1;
-                    else if ((value > 21) && (player == "ant")) result = 3;
-                    else if (value == 21) result = 2;
+                    if ((value > 7) && (player == "prot")) result = 1;
+                    else if ((value > 7) && (player == "ant")) result = 3;
+                    else if (value == 7) result = 2;
                     id = newRoot.id * 10 + 1 + i;
                     tmp = new Node(id, value, player, result, newRoot);
                     this.addNode(tmp);
@@ -77,28 +77,71 @@ namespace graph_first
                     //tmp.print();
                 }
             }
-            public void markSolution()
+            public List<Edge> findEdgeStartingWithId(int id)
             {
-
-            }
-            public void chooseSolution(Tree tree, int id, string player)
-            {
-                Edge tmp=null;
-                for (int i = 0; i < tree.edges.Count() ; i++)
+                List<Edge> result=new List<Edge>();
+                for (int i = 0; i < edges.Count(); i++)
                 {
-                    if ((tree.edges[i].begin.id == id)&&(tmp==null))
+                    if (edges[i].begin.id == id) result.Add(edges[i]);
+                }
+                return result;
+            }
+            public Node findNode(int id)
+            {
+                for (int i = 0; i < nodes.Count(); i++)
+                {
+                    if (nodes[i].id == id) return nodes[i];
+                }
+                return null;
+            }
+            public void markSolution(Node node)
+            {
+                if (node.id == 0) chooseSolution(this, 0);
+                Console.WriteLine("markSolution node id -> " + node.id);
+                if (node.value >= 7)
+                {
+                    Console.WriteLine("marksolution break -> " + node.id);
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
                     {
-                        tmp = tree.edges[i];
-                    }
-                    else if ((tree.edges[i].begin.id == id)&&(tmp.end.result>tree.edges[i].end.result)&&(player=="ant"))
-                    {
-                        tmp = tree.edges[i];
-                    }
-                    else if ((tree.edges[i].begin.id == id) && (tmp.end.result < tree.edges[i].end.result) && (player == "prot"))
-                    {
-                        tmp = tree.edges[i];
+                        chooseSolution(this, node.id * 10 + 1 + i);
+                        Console.WriteLine("chooseSolution node id -> " + (node.id * 10 + 1 + i)+ "player: " +node.player);
                     }
                 }
+            }
+            public void chooseSolution(Tree tree, int id)
+            {
+                Console.WriteLine(id);
+                Node thisNode = tree.findNode(id);
+                if (thisNode.value >= 7)
+                {
+                    Console.WriteLine("choose solution break -> " + id);
+                    return;
+                }
+                string player = thisNode.player;
+                if(id!=0) markSolution(thisNode);
+                List<Edge> edgesToCheck = findEdgeStartingWithId(id);
+                Edge tmp = edgesToCheck[0];
+                tmp.begin.result = tmp.end.result;
+                for (int i = 1; i < edgesToCheck.Count(); i++)
+                {
+                    if ((player == "ant") && (edgesToCheck[i].end.result < tmp.end.result))
+                    {
+                        tmp = edgesToCheck[i];
+                        edgesToCheck[i].begin.result = tmp.end.result;
+                        Console.WriteLine("Ant condition");
+                    }
+                    if ((player == "prot") && (edgesToCheck[i].end.result > tmp.end.result))
+                    {
+                        tmp = edgesToCheck[i];
+                        edgesToCheck[i].begin.result = tmp.end.result;
+                        Console.WriteLine("Prot condition");
+                    }
+                }
+                tmp.color = "red";
             }
             public void print()
             {
@@ -178,6 +221,7 @@ namespace graph_first
         //    ab.print();
         Tree tree = new Tree();
         tree.createBranches(null);
+            tree.markSolution(tree.nodes[0]);
         tree.treeAsString();
 
         }
