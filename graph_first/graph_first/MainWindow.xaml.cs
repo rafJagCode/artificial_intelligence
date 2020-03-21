@@ -48,12 +48,12 @@ namespace graph_first
 
             public void createBranches(Node root)
             {
-                if ((root!=null)&&(root.value >= 21)) return;
+                if ((root!=null)&&(root.value >= 7)) return;
                 Node newRoot = root;
                 Node tmp;
                 int id;
                 int value;
-                int result = 2;
+                int result = 0;
                 string player;
                 if (newRoot == null)
                 {
@@ -66,8 +66,9 @@ namespace graph_first
                 for (int i = 0; i < 3; i++)
                 {
                     value = newRoot.value + 4 + i;
-                    if ((value > 21) && (player == "prot")) result = 1;
-                    else if ((value > 21) && (player == "ant")) result = 3;
+                    if ((value > 7) && (player == "prot")) result = 1;
+                    else if ((value > 7) && (player == "ant")) result = 3;
+                    else if (value == 7) result = 2;
                     id = newRoot.id * 10 + 1 + i;
                     tmp = new Node(id, value, player, result, newRoot);
                     this.addNode(tmp);
@@ -75,6 +76,72 @@ namespace graph_first
                     this.createBranches(tmp);
                     //tmp.print();
                 }
+            }
+            public List<Edge> findEdgeStartingWithId(int id)
+            {
+                List<Edge> result=new List<Edge>();
+                for (int i = 0; i < edges.Count(); i++)
+                {
+                    if (edges[i].begin.id == id) result.Add(edges[i]);
+                }
+                return result;
+            }
+            public Node findNode(int id)
+            {
+                for (int i = 0; i < nodes.Count(); i++)
+                {
+                    if (nodes[i].id == id) return nodes[i];
+                }
+                return null;
+            }
+            public void markSolution(Node node)
+            {
+                if (node.id == 0) chooseSolution(this, 0);
+                Console.WriteLine("markSolution node id -> " + node.id);
+                if (node.value >= 7)
+                {
+                    Console.WriteLine("marksolution break -> " + node.id);
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        chooseSolution(this, node.id * 10 + 1 + i);
+                        Console.WriteLine("chooseSolution node id -> " + (node.id * 10 + 1 + i)+ "player: " +node.player);
+                    }
+                }
+            }
+            public void chooseSolution(Tree tree, int id)
+            {
+                Console.WriteLine(id);
+                Node thisNode = tree.findNode(id);
+                if (thisNode.value >= 7)
+                {
+                    Console.WriteLine("choose solution break -> " + id);
+                    return;
+                }
+                string player = thisNode.player;
+                if(id!=0) markSolution(thisNode);
+                List<Edge> edgesToCheck = findEdgeStartingWithId(id);
+                Edge tmp = edgesToCheck[0];
+                tmp.begin.result = tmp.end.result;
+                for (int i = 1; i < edgesToCheck.Count(); i++)
+                {
+                    if ((player == "ant") && (edgesToCheck[i].end.result < tmp.end.result))
+                    {
+                        tmp = edgesToCheck[i];
+                        edgesToCheck[i].begin.result = tmp.end.result;
+                        Console.WriteLine("Ant condition");
+                    }
+                    if ((player == "prot") && (edgesToCheck[i].end.result > tmp.end.result))
+                    {
+                        tmp = edgesToCheck[i];
+                        edgesToCheck[i].begin.result = tmp.end.result;
+                        Console.WriteLine("Prot condition");
+                    }
+                }
+                tmp.color = "red";
             }
             public void print()
             {
@@ -90,7 +157,7 @@ namespace graph_first
                 string result = "";
                 for (int i = 0; i < this.edges.Count(); i++)
                 {
-                    result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value + "\"];\n";
+                    result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value +"\" color=\""+this.edges[i].color+"\"];\n";
                 }
                 Console.WriteLine(result);
             }
@@ -103,7 +170,7 @@ namespace graph_first
             public int value { get; set; }
             public int result { get; set; } //1: przegrana 2: remis 3: wygrana
 
-            public Node(int _id, int _value, string _player = "prot", int _result = 2, Node _ancestor=null)
+            public Node(int _id, int _value, string _player = "prot", int _result = 0, Node _ancestor=null)
             {
                 id=_id;
                 value=_value;
@@ -126,12 +193,14 @@ namespace graph_first
             public Node begin { get; set; }
             public Node end { get; set; }
             public int value { get; set; }
+            public string color { get; set; }
 
-            public Edge(Node _begin, Node _end, int _value)
+            public Edge(Node _begin, Node _end, int _value, string _color="black")
             {
                 begin=_begin;
                 end=_end;
                 value = _value;
+                color = _color;
             }
             public void print()
             {
@@ -152,6 +221,7 @@ namespace graph_first
         //    ab.print();
         Tree tree = new Tree();
         tree.createBranches(null);
+            tree.markSolution(tree.nodes[0]);
         tree.treeAsString();
 
         }
