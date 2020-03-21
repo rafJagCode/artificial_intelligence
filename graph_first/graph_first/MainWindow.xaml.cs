@@ -53,7 +53,7 @@ namespace graph_first
                 Node tmp;
                 int id;
                 int value;
-                int result = 2;
+                int result = 0;
                 string player;
                 if (newRoot == null)
                 {
@@ -68,12 +68,36 @@ namespace graph_first
                     value = newRoot.value + 4 + i;
                     if ((value > 21) && (player == "prot")) result = 1;
                     else if ((value > 21) && (player == "ant")) result = 3;
+                    else if (value == 21) result = 2;
                     id = newRoot.id * 10 + 1 + i;
                     tmp = new Node(id, value, player, result, newRoot);
                     this.addNode(tmp);
                     this.addEdge(new Edge(newRoot, tmp, 4 + i));
                     this.createBranches(tmp);
                     //tmp.print();
+                }
+            }
+            public void markSolution()
+            {
+
+            }
+            public void chooseSolution(Tree tree, int id, string player)
+            {
+                Edge tmp=null;
+                for (int i = 0; i < tree.edges.Count() ; i++)
+                {
+                    if ((tree.edges[i].begin.id == id)&&(tmp==null))
+                    {
+                        tmp = tree.edges[i];
+                    }
+                    else if ((tree.edges[i].begin.id == id)&&(tmp.end.result>tree.edges[i].end.result)&&(player=="ant"))
+                    {
+                        tmp = tree.edges[i];
+                    }
+                    else if ((tree.edges[i].begin.id == id) && (tmp.end.result < tree.edges[i].end.result) && (player == "prot"))
+                    {
+                        tmp = tree.edges[i];
+                    }
                 }
             }
             public void print()
@@ -90,7 +114,7 @@ namespace graph_first
                 string result = "";
                 for (int i = 0; i < this.edges.Count(); i++)
                 {
-                    result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value + "\"];\n";
+                    result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value +"\" color=\""+this.edges[i].color+"\"];\n";
                 }
                 Console.WriteLine(result);
             }
@@ -103,7 +127,7 @@ namespace graph_first
             public int value { get; set; }
             public int result { get; set; } //1: przegrana 2: remis 3: wygrana
 
-            public Node(int _id, int _value, string _player = "prot", int _result = 2, Node _ancestor=null)
+            public Node(int _id, int _value, string _player = "prot", int _result = 0, Node _ancestor=null)
             {
                 id=_id;
                 value=_value;
@@ -126,12 +150,14 @@ namespace graph_first
             public Node begin { get; set; }
             public Node end { get; set; }
             public int value { get; set; }
+            public string color { get; set; }
 
-            public Edge(Node _begin, Node _end, int _value)
+            public Edge(Node _begin, Node _end, int _value, string _color="black")
             {
                 begin=_begin;
                 end=_end;
                 value = _value;
+                color = _color;
             }
             public void print()
             {
