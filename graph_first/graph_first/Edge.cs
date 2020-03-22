@@ -20,10 +20,5 @@ namespace graph_first
             value = _value;
             color = _color;
         }
-        public void print()
-        {
-            Console.WriteLine(begin.nodeAsString() + "---" + end.nodeAsString());
-        }
-
     }
 }

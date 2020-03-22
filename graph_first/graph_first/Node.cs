@@ -14,18 +14,13 @@ namespace graph_first
         public int value { get; set; }
         public int result { get; set; } //1: przegrana 2: remis 3: wygrana
 
-        public Node(int _id, int _value, string _player = "prot", int _result = 0, Node _ancestor = null)
+        public Node(int _id=0, int _value=0, string _player = "prot", int _result = 0, Node _ancestor = null)
         {
             id = _id;
             value = _value;
             player = _player;
             result = _result;
             ancestor = _ancestor;
-        }
-
-        public void print()
-        {
-            Console.WriteLine(this.id + "=>" + this.value + "=>" + this.player + "=>" + this.result);
         }
 
         public string nodeAsString()

@@ -27,7 +27,7 @@ namespace graph_first
         private void test_click(object sender, RoutedEventArgs e)
         {
             Tree tree = new Tree();
-            tree.createBranches(null);
+            tree.createBranches(tree.root);
             tree.chooseSolution(0);
             tree.treeAsString();
         }
