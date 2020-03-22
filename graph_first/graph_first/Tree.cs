@@ -127,6 +127,20 @@ namespace graph_first
             }
             return tmp;
         }
+
+        public Tree copy()
+        {
+            Tree result = new Tree();
+            foreach(Node node in nodes)
+            {
+                result.nodes.Add(new Node(node.id,node.value,node.player,node.result,node.ancestor));
+            }
+            foreach (Edge edge in edges)
+            {
+                result.edges.Add(new Edge(edge.begin,edge.end,edge.value,edge.color));
+            }
+            return result;
+        }
         // Wypisz drzewo w formie łańcucha znaków w formacie zgodnym z graphViz
         public void treeAsString()
         {

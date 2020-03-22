@@ -26,10 +26,13 @@ namespace graph_first
 
         private void test_click(object sender, RoutedEventArgs e)
         {
-            Tree tree = new Tree();
-            tree.createBranches(tree.root);
-            tree.chooseSolution(0);
-            tree.treeAsString();
+
+            Tree startingTree = new Tree();
+            startingTree.createBranches(startingTree.root);
+            Tree solutionTree = startingTree.copy();
+            solutionTree.chooseSolution(0);
+            startingTree.treeAsString();
+            solutionTree.treeAsString();
         }
     }
 }
