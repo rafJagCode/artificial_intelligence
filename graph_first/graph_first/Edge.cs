@@ -8,9 +8,9 @@ namespace graph_first
 {
     public class Edge
     {
-        public Node begin { get; set; }
-        public Node end { get; set; }
-        public int value { get; set; }
+        public Node begin { get; private set; }
+        public Node end { get; private set; }
+        public int value { get; private set; }
         public string color { get; set; }
 
         public Edge(Node _begin, Node _end, int _value, string _color = "black")

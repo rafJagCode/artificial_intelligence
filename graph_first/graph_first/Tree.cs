@@ -8,9 +8,9 @@ namespace graph_first
 {
     public class Tree
     {
-        public List<Node> nodes;
-        public List<Edge> edges;
-        public Node root;
+        private List<Node> nodes;
+        private List<Edge> edges;
+        public Node root { get; protected set; }
 
         public Tree()
         {
@@ -20,22 +20,22 @@ namespace graph_first
             addNode(root);
         }
 
-        public void addNode(Node node)
+        private void addNode(Node node)
         {
             nodes.Add(node);
         }
 
-        public void addEdge(Edge edge)
+        private void addEdge(Edge edge)
         {
             edges.Add(edge);
         }
 
-        public string changePlayer(string player)
+        private string changePlayer(string player)
         {
             return player == "ant" ? "prot" : "ant";
         }
 
-        public void figureOutTheScore(Node node)
+        private void figureOutTheScore(Node node)
         {
             int value = node.value;
             string player = node.player;
@@ -65,7 +65,7 @@ namespace graph_first
             }
         }
 
-        public List<Edge> findEdgeStartingWithId(int id)
+        private List<Edge> findEdgeStartingWithId(int id)
         {
             List<Edge> result = new List<Edge>();
             for (int i = 0; i < edges.Count(); i++)
@@ -75,7 +75,7 @@ namespace graph_first
             return result;
         }
 
-        public Node findNode(int id)
+        private Node findNode(int id)
         {
             for (int i = 0; i < nodes.Count(); i++)
             {
@@ -108,7 +108,7 @@ namespace graph_first
             }
         }
 
-        public Edge findEdgeWithSmallestResult(List<Edge> possibleEdges)
+        private Edge findEdgeWithSmallestResult(List<Edge> possibleEdges)
         {
             Edge tmp = possibleEdges[0];
             for (int i = 1; i < possibleEdges.Count(); i++)
@@ -118,7 +118,7 @@ namespace graph_first
             return tmp;
         }
 
-        public Edge findEdgeWithBiggestResult(List<Edge> possibleEdges)
+        private Edge findEdgeWithBiggestResult(List<Edge> possibleEdges)
         {
             Edge tmp = possibleEdges[0];
             for (int i = 1; i < possibleEdges.Count(); i++)

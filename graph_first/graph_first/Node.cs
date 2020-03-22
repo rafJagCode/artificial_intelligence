@@ -8,10 +8,10 @@ namespace graph_first
 {
     public class Node
     {
-        public Node ancestor { get; set; }
-        public string player { get; set; }
-        public int id { get; set; }
-        public int value { get; set; }
+        public Node ancestor { get; private set; }
+        public string player { get; private set; }
+        public int id { get; private set; }
+        public int value { get; private set; }
         public int result { get; set; } //1: przegrana 2: remis 3: wygrana
 
         public Node(int _id=0, int _value=0, string _player = "prot", int _result = 0, Node _ancestor = null)
