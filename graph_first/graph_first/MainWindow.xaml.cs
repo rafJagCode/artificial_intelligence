@@ -18,21 +18,29 @@ namespace graph_first
     public partial class MainWindow : Window
     {
         static public int limit = 21;
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void test_click(object sender, RoutedEventArgs e)
+        private void generateBtn(object sender, RoutedEventArgs e)
         {
 
             Tree startingTree = new Tree();
             startingTree.createBranches(startingTree.root);
             Tree solutionTree = startingTree.copy();
             solutionTree.chooseSolution(0);
-            startingTree.treeAsString();
-            solutionTree.treeAsString();
+            treeTextField.Text = startingTree.treeAsString();
+            solutionTextField.Text = solutionTree.treeAsString();
+        }
+
+        private void copyTreeBtn(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(treeTextField.Text);
+        }
+        private void copySolutionBtn(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(solutionTextField.Text);
         }
     }
 }
