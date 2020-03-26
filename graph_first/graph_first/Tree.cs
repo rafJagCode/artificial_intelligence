@@ -142,7 +142,7 @@ namespace graph_first
             return result;
         }
         // Wypisz drzewo w formie łańcucha znaków w formacie zgodnym z graphViz
-        public void treeAsString()
+        public string treeAsString()
         {
 
             string result = "digraph G {\n";
@@ -151,7 +151,7 @@ namespace graph_first
                 result += this.edges[i].begin.nodeAsString() + " -> " + this.edges[i].end.nodeAsString() + "[label = \"" + this.edges[i].value + "\" color=\"" + this.edges[i].color + "\"];\n";
             }
             result += "}";
-            Console.WriteLine(result);
+            return result;
         }
     }
 }
