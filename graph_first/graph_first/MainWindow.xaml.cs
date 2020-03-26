@@ -32,6 +32,10 @@ namespace graph_first
             solutionTree.chooseSolution(0);
             treeTextField.Text = startingTree.treeAsString();
             solutionTextField.Text = solutionTree.treeAsString();
+            copySolutionButton.Visibility = Visibility.Visible;
+            copyTreeButton.Visibility = Visibility.Visible;
+            generateButton.Visibility = Visibility.Hidden;
+            okImage.Visibility = Visibility.Visible;
         }
 
         private void copyTreeBtn(object sender, RoutedEventArgs e)
