@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -40,11 +40,26 @@ namespace graph_first
 
         private void copyTreeBtn(object sender, RoutedEventArgs e)
         {
+
             Clipboard.SetText(treeTextField.Text);
+            popupText.Text = "Copied to clipboard";
+
+
         }
         private void copySolutionBtn(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(solutionTextField.Text);
+        }
+
+        private void popup_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!popup.IsOpen)
+                popup.IsOpen = true;
+
+            var mousePosition = e.GetPosition(myWindow);
+            popup.HorizontalOffset = mousePosition.X+20;
+            popup.VerticalOffset = mousePosition.Y-20;
+
         }
     }
 }
