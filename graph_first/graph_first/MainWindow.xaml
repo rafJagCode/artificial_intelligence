@@ -8,9 +8,10 @@
         WindowState="Maximized"
         Title="Game Graph" Height="481" Width="720.5"
         MouseMove="popup_MouseMove"
-        Name="myWindow">
+        Name="myWindow"
+       >
 
-    <Grid Background="#FF6BF3EA" >
+    <Grid Background="#FF6BF3EA">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="auto"/>
@@ -43,17 +44,15 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <TextBox x:Name="treeTextField" Grid.Row="2" Grid.Column="0" BorderThickness="0" SelectionBrush="Transparent" Cursor="Arrow" IsReadOnly="True" Text="" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="22,10,10,10" Background="#FF92F9F2" FontFamily="Segoe UI Semibold" FontSize="7" FontStyle="Italic" Foreground="#FF2824E8"/>
-        <TextBox  x:Name="solutionTextField" Grid.Row="2" Grid.Column="2" BorderThickness="0" SelectionBrush="Transparent" Cursor="Arrow" IsReadOnly="True" Text="" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10,10,16.5,10" Background="#FF92F9F2" FontFamily="Segoe UI Semibold" FontSize="7" FontStyle="Italic" Foreground="#FF2824E8"/>
+        <TextBox x:Name="treeTextField" Grid.Row="2" Grid.Column="0" BorderThickness="0" SelectionBrush="Transparent" Cursor="Arrow" IsReadOnly="True" Text="" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="22,10,10,10" Background="#FF92F9F2" FontFamily="Segoe UI Semibold" FontSize="7" FontStyle="Italic" Foreground="#FF7775E0"/>
+        <TextBox  x:Name="solutionTextField" Grid.Row="2" Grid.Column="2" BorderThickness="0" SelectionBrush="Transparent" Cursor="Arrow" IsReadOnly="True" Text="" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10,10,16.5,10" Background="#FF92F9F2" FontFamily="Segoe UI Semibold" FontSize="7" FontStyle="Italic" Foreground="#FF7775E0"/>
         <TextBlock Text="Generated tree of game" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Top" Height="23" Grid.Row="1" Grid.RowSpan="2" FontSize="15" FontFamily="Segoe UI Black" FontStyle="Italic"/>
         <TextBlock Text="Tree of solution" Grid.Column="2" TextAlignment="Center" Margin="0,0,-0.5,0" VerticalAlignment="Top" Height="23" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.RowSpan="2" FontSize="15" FontFamily="Segoe UI Black" FontStyle="Italic"/>
         <Border Grid.Row="2" Grid.Column="0" Margin="10,0,0,0"  CornerRadius="10" Background="#FF92F9F2" BorderBrush="#FF1B0A0A" Panel.ZIndex="-1"/>
         <Border Grid.Row="2" Grid.Column="2" Margin="0,0,9.5,0" CornerRadius="10" Background="#FF92F9F2" BorderBrush="#FF1B0A0A" Panel.ZIndex="-1" />
         <Image x:Name="okImage" Source="Resources/ok-icon.png" Grid.Column="1" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Height="68" Grid.RowSpan="2" Width="113" />
-        <Popup x:Name="popup" IsOpen="False" Placement="Relative" HorizontalOffset="0" VerticalOffset="0" PlacementTarget="{Binding ElementName=myWindow}">
-            <Border BorderBrush="Gray" >
-                <TextBlock x:Name="popupText" Background="WhiteSmoke" TextWrapping="Wrap" Width="auto" Height="auto" />
-            </Border>
+        <Popup x:Name="popup" IsOpen="True" Placement="Relative" HorizontalOffset="0" VerticalOffset="0" PlacementTarget="{Binding ElementName=myWindow}" AllowsTransparency="True">
+            <TextBlock x:Name="popupText" Width="auto" Height="auto" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="#FF0D4F65"/>
         </Popup>
     </Grid>
 
