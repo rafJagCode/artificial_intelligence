@@ -127,27 +127,6 @@ namespace graph_first
             }
             return tmp;
         }
-
-        //public void copyTo(Tree result)
-        //{
-        //    //Node newRoot= new Node(_root._id, _root._value, _root._player, _root._result, _root._ancestor);
-        //    int id = 0;
-        //    Node tmp1=null;
-        //    Node tmp2=null;
-        //    //result.addNode(newRoot);
-        //    foreach (Edge edge in _edges)
-        //    {
-        //        if (edge._begin._id == 0) tmp1 = result._root;
-        //        if (id != edge._begin._id)
-        //        {
-        //            id = edge._begin._id;
-        //            tmp1 = new Node(edge._begin._id, edge._begin._value, edge._begin._player, edge._begin._result);
-        //        }
-        //        tmp2 = new Node(edge._end._id, edge._end._value, edge._end._player, edge._end._result, tmp1);
-        //        result.addNode(tmp2);
-        //        result.addEdge(new Edge(tmp1,tmp2,edge._value,edge._color));
-        //    }
-        //}
         public void copyTo(Tree result)
         {
             result._nodes = _nodes.ConvertAll(node => new Node(node._id,node._value,node._player,node._result,node._ancestor));
@@ -156,13 +135,20 @@ namespace graph_first
         // Wypisz drzewo w formie łańcucha znaków w formacie zgodnym z graphViz
         public string treeAsString()
         {
-            string result = "digraph G {\n";
+            StringBuilder sb = new StringBuilder("digraph G {\n");
             for (int i = 0; i < _edges.Count(); i++)
             {
-                result += this._edges[i]._begin.nodeAsString() + " -> " + this._edges[i]._end.nodeAsString() + "[label = \"" + _edges[i]._value + "\" color=\"" + _edges[i]._color + "\"];\n";
+                sb.Append(_edges[i]._begin.nodeAsString());
+                sb.Append(" -> ");
+                sb.Append(_edges[i]._end.nodeAsString());
+                sb.Append("[label = \"");
+                sb.Append(_edges[i]._value);
+                sb.Append("\" color=\"");
+                sb.Append(_edges[i]._color);
+                sb.Append("\"];\n");
             }
-            result += "}";
-            return result;
+            sb.Append("}");
+            return sb.ToString();
         }
     }
 }
