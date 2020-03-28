@@ -30,13 +30,23 @@ namespace graph_first
 
         private void generateBtn(object sender, RoutedEventArgs e)
         {
-
+            int x = 0;
+            int y = 0;
             Tree startingTree = new Tree();
-            startingTree.createBranches(startingTree.root);
-            Tree solutionTree = startingTree.copy();
+            Tree solutionTree = new Tree();
+            startingTree.createBranches(startingTree._root);
+            startingTree.copyTo(solutionTree);
             solutionTree.chooseSolution(0);
+            //solutionTree._edges[0]._end._result = 223;
+            //solutionTree._nodes[1]._result = 223;
+            //startingTree._nodes[1]._result = 223;
+            //foreach (Edge node in startingTree._edges) x++;
+            //foreach (Edge node in solutionTree._edges) y++;
+            //treeTextField.Text = x.ToString();
+            //solutionTextField.Text = y.ToString();
             treeTextField.Text = startingTree.treeAsString();
             solutionTextField.Text = solutionTree.treeAsString();
+
             copySolutionButton.Visibility = Visibility.Visible;
             copyTreeButton.Visibility = Visibility.Visible;
             generateButton.Visibility = Visibility.Hidden;

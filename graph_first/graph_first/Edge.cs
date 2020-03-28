@@ -8,17 +8,17 @@ namespace graph_first
 {
     public class Edge
     {
-        public Node begin { get; private set; }
-        public Node end { get; private set; }
-        public int value { get; private set; }
-        public string color { get; set; }
+        public Node _begin { get; private set; }
+        public Node _end { get; private set; }
+        public int _value { get; private set; }
+        public string _color { get; set; }
 
-        public Edge(Node _begin, Node _end, int _value, string _color = "black")
+        public Edge(Node begin, Node end, int value, string color = "black")
         {
-            begin = _begin;
-            end = _end;
-            value = _value;
-            color = _color;
+            _begin = begin;
+            _end = end;
+            _value = value;
+            _color = color;
         }
     }
 }

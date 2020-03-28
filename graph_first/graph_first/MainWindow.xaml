@@ -8,8 +8,7 @@
         WindowState="Maximized"
         Title="Game Graph" Height="481" Width="720.5"
         MouseMove="popup_MouseMove"
-        Name="myWindow"
-       >
+        Name="myWindow">
 
     <Grid Background="#FF6BF3EA">
         <Grid.ColumnDefinitions>
@@ -55,5 +54,4 @@
             <TextBlock x:Name="popupText" Width="auto" Height="auto" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="#FF0D4F65"/>
         </Popup>
     </Grid>
-
 </Window>
