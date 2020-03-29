@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace graph_first
 {
@@ -10,7 +8,7 @@ namespace graph_first
     {
         public List<Node> _nodes;
         public List<Edge> _edges;
-        public Node _root { get; set; }
+        public Node _root { get; private set; }
 
         public Tree()
         {
