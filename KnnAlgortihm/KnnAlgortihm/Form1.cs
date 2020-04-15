@@ -13,11 +13,18 @@ namespace KnnAlgortihm
 {
     public partial class Form1 : Form
     {
+        
+        SampleColection sampleColection;
         public Form1()
         {
             InitializeComponent();
-        }
+            attrBox.AcceptsTab = true;
+            comboBox.Items.Add("Euclidean Metric");
+            comboBox.Items.Add("Manhattan Metric");
+            comboBox.Items.Add("Czybaszew Metric");
 
+        }
+        
         private void loadData_Click(object sender, EventArgs e)
         {
             if (ofd.ShowDialog() != DialogResult.OK)
@@ -28,16 +35,44 @@ namespace KnnAlgortihm
             if (file.Extension != ".txt")
             {
                 MessageBox.Show("Dozwolone rozszerzenie to \"TXT\"");
+                return;
             }
             var rows = File.ReadAllLines(ofd.FileName);
             var data = new Data(rows);
-            var sampleColection = new SampleColection(data.dataFromFile);
-            string userSampleString= "4.6\t3.4\t1.4\t0.3";
+            sampleColection = new SampleColection(data.dataFromFile);
+            label1.Visible = true;
+            label2.Visible = true;
+            label3.Visible = true;
+            attrBox.Visible = true;
+            kBox.Visible = true;
+            comboBox.Visible = true;
+            loadData.Visible = false;
+            confirm.Visible = true;
+
+            //double precision=Algorithm.precision(sampleColection,3,Metrics.euklideanMetric);
+        }
+
+        private void confirm_Click(object sender, EventArgs e)
+        {
+            int k;
+            bool correctK = int.TryParse(kBox.Text,out k);
+            if (!correctK)
+            {
+                MessageBox.Show("Podaj K ktore jest liczba calkowita");
+                return;
+            }
+            Algorithm.metric metric= Metrics.euklideanMetric;
+            
+            string userSampleString = attrBox.Text;
+            if (comboBox.SelectedItem == "Euclidean Metric") metric = Metrics.euklideanMetric;
+            if (comboBox.SelectedItem == "Manhattan Metric") metric = Metrics.manhattanMetric;
+            if (comboBox.SelectedItem == "Czybaszew Metric") metric = Metrics.czybaszewMetric;
             List<double> userSampleAttr = Data.rowToList(userSampleString);
             sampleColection.normalizeAttributes(userSampleAttr);
             sampleColection.normalizeSamples();
-            int? decision=Algorithm.chooseDecision(userSampleAttr, sampleColection, 3, Metrics.euklideanMetric);
-            double precision=Algorithm.precision(sampleColection,3,Metrics.euklideanMetric);
+            int? decision = Algorithm.chooseDecision(userSampleAttr, sampleColection, k, metric);
+            MessageBox.Show("Decyzja dla podanych argumentow to: " +decision);
         }
+
     }
 }
