@@ -68,11 +68,14 @@ namespace KnnAlgortihm
         {
             int probes = 0;
             int correct = 0;
+            Normalization.normalizeSamples(sampleColection);
             foreach(Sample sample in sampleColection.samples)
             {
                 probes++;
+                sampleColection.removeSample(sample);
                 int? result=chooseDecision(sample.attributes, sampleColection, k, choosedMetric);
                 if (result == sample.decision) correct++;
+                sampleColection.addSample(sample);
             }
             return (double)correct / probes * 100;
         }

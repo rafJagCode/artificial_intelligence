@@ -8,7 +8,6 @@ namespace KnnAlgortihm
 {
     class Metrics
     {
-        public delegate double metric(List<double> attrToCheck, List<double> attrToCompare);
         public static double euklideanMetric(List<double> attrToCheck, List<double> attrToCompare)
         {
             double distance = 0;

@@ -67,10 +67,10 @@ namespace KnnAlgortihm
             if (comboBox.SelectedItem == "Euclidean Metric") metric = Metrics.euklideanMetric;
             if (comboBox.SelectedItem == "Manhattan Metric") metric = Metrics.manhattanMetric;
             if (comboBox.SelectedItem == "Czybaszew Metric") metric = Metrics.czybaszewMetric;
-            List<double> userSampleAttr = Data.rowToList(userSampleString);
-            sampleColection.normalizeAttributes(userSampleAttr);
-            sampleColection.normalizeSamples();
-            int? decision = Algorithm.chooseDecision(userSampleAttr, sampleColection, k, metric);
+            List<double> attributesToCheck = Data.rowToList(userSampleString);
+            Normalization.normalizeAttributes(sampleColection, attributesToCheck);
+            Normalization.normalizeSamples(sampleColection);
+            int? decision = Algorithm.chooseDecision(attributesToCheck, sampleColection, k, metric);
             MessageBox.Show("Decyzja dla podanych argumentow to: " +decision);
         }
 

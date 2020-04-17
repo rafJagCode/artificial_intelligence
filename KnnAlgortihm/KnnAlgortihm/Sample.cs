@@ -15,5 +15,17 @@ namespace KnnAlgortihm
             this.attributes = attributes;
             this.decision = decision;
         }
+        public static Sample makeSample(List<double> row)
+        {
+            List<double> attributes = new List<double>();
+            int decision;
+            for (int i = 0; i < row.Count - 1; i++)
+            {
+                attributes.Add(row[i]);
+            }
+            decision = (int)row[row.Count - 1];
+            Sample sample = new Sample(attributes, decision);
+            return sample;
+        }
     }
 }
