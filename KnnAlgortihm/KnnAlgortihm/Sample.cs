@@ -27,5 +27,14 @@ namespace KnnAlgortihm
             Sample sample = new Sample(attributes, decision);
             return sample;
         }
+        public Sample copy()
+        {
+            Sample newSample = new Sample(new List<double>(), this.decision);
+            foreach(double attr in this.attributes)
+            {
+                newSample.attributes.Add(attr);
+            }
+            return newSample;
+        }
     }
 }

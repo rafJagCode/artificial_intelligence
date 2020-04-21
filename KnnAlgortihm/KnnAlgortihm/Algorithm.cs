@@ -8,14 +8,14 @@ namespace KnnAlgortihm
 {
     class Algorithm
     {
-        public delegate double metric(List<double> attrToCheck, List<double> attrToCompare);
-        static Dictionary<int, List<double>> countDistances(List<double> sampleToCheck, SampleColection data, metric choosedMetric)
+        
+        static Dictionary<int, List<double>> countDistances(List<double> sampleToCheck, SampleColection data, Metrics.metric choosedMetric,int p)
         {
             var distances = new Dictionary<int, List<double>>();
             double distance;
             foreach (Sample sample in data.samples)
             {
-                distance = choosedMetric(sampleToCheck, sample.attributes);
+                distance = choosedMetric(sampleToCheck, sample.attributes,p);
                 if (!distances.ContainsKey(sample.decision))
                     distances.Add(sample.decision, new List<double> { distance });
                 else
@@ -23,9 +23,10 @@ namespace KnnAlgortihm
             }
             return distances;
         }
-        static Dictionary<int, double> countSumOfKminDistances(List<double> sampleToCheck, SampleColection data, int k,metric choosedMetric)
+        static Dictionary<int, double> countSumOfKminDistances(List<double> sampleToCheck, SampleColection data, int k,Metrics.metric choosedMetric,int p)
         {
-            Dictionary<int, List<double>> distances = countDistances(sampleToCheck, data,choosedMetric);
+            var distances = new Dictionary<int, List<double>>();
+            distances = countDistances(sampleToCheck, data,choosedMetric,p);
             double sumOfKminDistances = 0;
             var minDistances = new Dictionary<int, double>();
             foreach (var item in distances)
@@ -48,9 +49,12 @@ namespace KnnAlgortihm
             if (count > 1) return false;
             return true;
         }
-        public static int? chooseDecision(List<double> sampleToCheck, SampleColection data, int k,metric choosedMetric)
+        public static int? chooseDecision(List<double> attributesToCheck, SampleColection sampleColection, int k,Metrics.metric choosedMetric,int p)
         {
-            Dictionary<int, double> minDistances = countSumOfKminDistances(sampleToCheck, data, k,choosedMetric);
+            var normalizedAttributes = Normalization.normalizeAttributes(sampleColection, attributesToCheck);
+            var normalizedSampleColection = Normalization.normalizeSampleColection(sampleColection);
+            var minDistances = new Dictionary<int, double>();
+            minDistances = countSumOfKminDistances(normalizedAttributes, normalizedSampleColection, k,choosedMetric,p);
             double min = minDistances.First().Value;
             int decision = minDistances.First().Key;
             foreach(var item in minDistances)
@@ -64,21 +68,5 @@ namespace KnnAlgortihm
             if (isOnlyOneMin(minDistances, min)) return decision;
             return null;
         }
-        public static double precision(SampleColection sampleColection,int k, metric choosedMetric)
-        {
-            int probes = 0;
-            int correct = 0;
-            Normalization.normalizeSamples(sampleColection);
-            foreach(Sample sample in sampleColection.samples)
-            {
-                probes++;
-                sampleColection.removeSample(sample);
-                int? result=chooseDecision(sample.attributes, sampleColection, k, choosedMetric);
-                if (result == sample.decision) correct++;
-                sampleColection.addSample(sample);
-            }
-            return (double)correct / probes * 100;
-        }
-        
     }
 }

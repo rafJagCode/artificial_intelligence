@@ -22,14 +22,34 @@ namespace KnnAlgortihm
             var datas = row.Trim().Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < datas.Length; i++)
             {
-                double result;
-                bool comma = double.TryParse(datas[i], out result);
-                var tmp = datas[i].Trim();
-                tmp = comma ? tmp.Replace(",", ".") : tmp.Replace(".", ",");
-                var number = double.Parse(tmp);
-                attributes.Add(number);
+                datas[i] = datas[i].Trim();
+                datas[i]=convertDoubleFormat(datas[i]);
+                var tmp = double.Parse(datas[i]);
+                attributes.Add(tmp);
             }
             return attributes;
+        }
+        public static string[] convertDoubleFormat(string[] numbers)
+        {
+            var result=new List<string>();
+            foreach(string number in numbers)
+            {
+                var tmp=convertDoubleFormat(number);
+                result.Add(tmp);
+            }
+            return result.ToArray();
+        }
+        public static string convertDoubleFormat(string number)
+        {
+            double result;
+            bool parsed = double.TryParse(number, out result);
+            if (parsed) return number;
+            number = number.Replace('.', ',');
+            parsed = double.TryParse(number, out result);
+            if (parsed) return number;
+            number = number.Replace(',', '.');
+            parsed = double.TryParse(number, out result);
+            return null;
         }
     }
 }

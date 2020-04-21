@@ -8,25 +8,32 @@ namespace KnnAlgortihm
 {
     class Normalization
     {
-        public static void normalizeSamples(SampleColection sampleColection)
+        public static SampleColection normalizeSampleColection(SampleColection sampleColection)
         {
+            SampleColection normalizedSampleColection = new SampleColection(new Data(new string[] { }).dataFromFile);
             foreach (Sample sample in sampleColection.samples)
             {
-                normalizeAttributes(sampleColection, sample.attributes);
+                var normalizedSample = new Sample(normalizeAttributes(sampleColection, sample.attributes), sample.decision);
+                normalizedSampleColection.samples.Add(normalizedSample);
             }
+            return normalizedSampleColection;
         }
         public static double normalizeAttribute(double attribute,double min, double max)
         {
             return (attribute - min) / (max - min);
         }
-        public static void normalizeAttributes(SampleColection sampleColection, List<double> attributes)
+        public static List<double> normalizeAttributes(SampleColection sampleColection, List<double> attributes)
         {
-            Dictionary<int, double> minDict = minAttributes(sampleColection, attributes.Count);
-            Dictionary<int, double> maxDict = maxAttributes(sampleColection, attributes.Count);
+            List<double> normalizedAttributes = new List<double>();
+            var minDict = new Dictionary<int, double>();
+            var maxDict = new Dictionary<int, double>();
+            minDict = minAttributes(sampleColection, attributes.Count);
+            maxDict = maxAttributes(sampleColection, attributes.Count);
             for (int i = 0; i < attributes.Count; i++)
             {
-                attributes[i] = normalizeAttribute(attributes[i],minDict[i],maxDict[i]);
+                normalizedAttributes.Add(normalizeAttribute(attributes[i],minDict[i],maxDict[i]));
             }
+            return normalizedAttributes;
         }
         public static Dictionary<int, double> minAttributes(SampleColection sampleColection, int numberOfAttr)
         {
