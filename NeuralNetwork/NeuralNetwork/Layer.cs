@@ -12,18 +12,19 @@ namespace NeuralNetwork
         int amountOfNeurons;
         [JsonProperty] int layerNumber;
         [JsonProperty] public Neuron[] neurons;
-        public Layer(KeyValuePair<int, int> layerInfo)
-        {
+        public Layer(KeyValuePair<int, int> layerInfo, int lastLayerNumber)
+        { 
             this.layerNumber = layerInfo.Key;
+            bool isLastLayer = this.layerNumber == lastLayerNumber ? true : false;
             this.amountOfNeurons = layerInfo.Value;
-            addNeuronsToLayer(this.layerNumber, this.amountOfNeurons);
+            addNeuronsToLayer(this.layerNumber, this.amountOfNeurons, isLastLayer);
         }
-        public void addNeuronsToLayer(int layerNumber, int amountOfNeurons)
+        public void addNeuronsToLayer(int layerNumber, int amountOfNeurons, bool isLastLayer)
         {
             this.neurons = new Neuron[amountOfNeurons];
             for (int i = 0; i < amountOfNeurons; i++)
             {
-                neurons[i] = new Neuron(layerNumber, i);
+                neurons[i] = new Neuron(layerNumber, i, isLastLayer);
             }
         }
         public void setWeights(int neuronNumber, List<double> weights)

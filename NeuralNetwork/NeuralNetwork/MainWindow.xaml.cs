@@ -30,13 +30,18 @@ namespace NeuralNetwork
         {
             var networkStructure = new List<int> { 2, 2, 1 };
             var testConfiguration = new Configuration(networkStructure);
-            var testNetwork = new Network(testConfiguration.getNeuronsConfiguration());
+            var testNetwork = new Network(testConfiguration);
             //var weights = WeightGenerator.getRandomWeights(networkStructure);
             var weights = WeightsHandler.loadWeights("weights.txt");
             testNetwork.setWeights(weights);
             testNetwork.calculateOutput(new List<double> { 1, 0 });
+            testNetwork.propagate(testNetwork.getNeuron(1, 0), 1);
             result = testNetwork.getNetworkAsJson()+"\n";
-
+            var cor = testNetwork.getNeuron(0, 1).weightsCorrections;
+            foreach(double c in cor)
+            {
+                result += c.ToString() + '\n';
+            }
             resultBox.Text = result;
 
             //WeightsHandler.saveWeights(weights);

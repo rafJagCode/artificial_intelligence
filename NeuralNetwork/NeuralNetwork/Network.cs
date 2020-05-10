@@ -9,17 +9,19 @@ namespace NeuralNetwork
 {
     class Network
     {
+        int lastLayerNumber;
         [JsonProperty] public Layer[] layers;
-        public Network(Dictionary<int, int> networkConfiguration)
+        public Network(Configuration networkConfiguration)
         {
-            addLayers(networkConfiguration);
+            this.lastLayerNumber = networkConfiguration.amountOfLayers - 1;
+            addLayers(networkConfiguration.neuronConfiguration);
         }
         public void addLayers(Dictionary<int,int>networkConfiguration)
         {
             this.layers = new Layer[networkConfiguration.Count];
             foreach(var layerInfo in networkConfiguration)
             {
-                Layer newLayer = new Layer(layerInfo);
+                Layer newLayer = new Layer(layerInfo, this.lastLayerNumber);
                 this.layers[layerInfo.Key] = newLayer;
             }
         }
@@ -48,6 +50,16 @@ namespace NeuralNetwork
         public Neuron getNeuron(int layerNumber, int neuronNumber)
         {
             return this.layers[layerNumber].neurons[neuronNumber];
+        }
+        public void propagate(Neuron neuron, double expected=0, double inputDifference = 0)
+        {
+            neuron.setWeightsCorrections(expected, inputDifference);
+            if (neuron.layerNumber == 0) return;
+            for (int i = 0; i < neuron.inputs.Count-1; i++)
+            {
+                this.propagate(this.getNeuron(neuron.layerNumber - 1, i), expected, neuron.inputDifferences[i]);
+            }
+
         }
     }
 }
