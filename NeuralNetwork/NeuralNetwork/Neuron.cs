@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NeuralNetwork
 {
     class Neuron
@@ -13,6 +8,9 @@ namespace NeuralNetwork
         [JsonProperty] int neuronNumber;
         [JsonProperty] double hiddenInputValue=1;
         [JsonProperty] List<double> weights;
+        [JsonProperty] double sum;
+        [JsonProperty] double output;
+        List<double> inputs;
         public Neuron(int layerNumber, int neuronNumber)
         {
             this.layerNumber = layerNumber;
@@ -34,14 +32,19 @@ namespace NeuralNetwork
         }
         public double calculateOutput(List<double>inputs)
         {
+            this.inputs = new List<double>(inputs);
             var addedHiddenInput = getInputsWithAddedHiddenValue(inputs);
-            double sum = Calculation.calcualateSum(addedHiddenInput, this.weights);
-            return Calculation.calcualateActivation(sum);
+            this.sum = Calculation.calcualateSum(addedHiddenInput, this.weights);
+            this.output= Calculation.calcualateActivation(sum);
+            return this.output;
 
         }
         public string getNeuronAsJson()
         {
             return JsonConvert.SerializeObject(this,Formatting.Indented);
         }
+
+
     }
+   
 }

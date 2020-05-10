@@ -28,19 +28,19 @@ namespace NeuralNetwork
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Neuron newNeuron = new Neuron(1, 0);
-            //newNeuron.setHiddenInputValue(1);
-            //newNeuron.setWeights(new List<double> { 0.3,0.1, 0.2 });
-            //result = newNeuron.getNeuronAsJson();
-            Configuration testConfiguration = new Configuration(new List<int> { 2, 2, 1 });
-            Network testNetwork = new Network(testConfiguration.getNeuronsConfiguration());
-            var weights = new Dictionary<int[], List<double>>();
-            weights.Add(new int[] { 0, 0 }, new List<double> { 0.3, 0.1, 0.2 });
-            weights.Add(new int[] { 0, 1 }, new List<double> { 0.6, 0.4, 0.5 });
-            weights.Add(new int[] { 1, 0 }, new List<double> { 0.9, 0.7, -0.8 });
+            var networkStructure = new List<int> { 2, 2, 1 };
+            var testConfiguration = new Configuration(networkStructure);
+            var testNetwork = new Network(testConfiguration.getNeuronsConfiguration());
+            //var weights = WeightGenerator.getRandomWeights(networkStructure);
+            var weights = WeightsHandler.loadWeights("weights.txt");
             testNetwork.setWeights(weights);
-            result = testNetwork.getNetworkAsJson() + testNetwork.calculateOutput(new List<double> { 1, 0 }).ToString();
+            testNetwork.calculateOutput(new List<double> { 1, 0 });
+            result = testNetwork.getNetworkAsJson()+"\n";
+
             resultBox.Text = result;
+
+            //WeightsHandler.saveWeights(weights);
+            //var test = WeightsHandler.loadWeights("weights.txt");
         }
     }
 }

@@ -41,9 +41,13 @@ namespace NeuralNetwork
             foreach(Layer layer in this.layers)
             {
                 if (layer == layers.First()) output = layer.calcualteOutput(inputs);
-                output = layer.calcualteOutput(output);
+                else output = layer.calcualteOutput(output);
             }
             return output.First();
+        }
+        public Neuron getNeuron(int layerNumber, int neuronNumber)
+        {
+            return this.layers[layerNumber].neurons[neuronNumber];
         }
     }
 }
