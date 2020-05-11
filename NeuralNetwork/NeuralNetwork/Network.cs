@@ -36,6 +36,18 @@ namespace NeuralNetwork
                 layers[neuronWeights.Key[0]].setWeights(neuronWeights.Key[1], neuronWeights.Value);
             }
         }
+        public Dictionary<int[], List<double>> getWeights()
+        {
+            var weights = new Dictionary<int[], List<double>>();
+            foreach(Layer layer in this.layers)
+            {
+                foreach(var neuronWeights in layer.getWeights())
+                {
+                    weights.Add(neuronWeights.Key, neuronWeights.Value);
+                }
+            }
+            return weights;
+        }
         public double calculateOutput(List<double> inputs)
         {
             List<double> output = new List<double> ();
@@ -51,6 +63,11 @@ namespace NeuralNetwork
         {
             return this.layers[layerNumber].neurons[neuronNumber];
         }
+        public Neuron getOutputNeuron()
+        {
+            Neuron outputNeuron = this.layers.Last().neurons[0];
+            return outputNeuron;
+        }
         public void propagate(Neuron neuron, double expected=0, double inputDifference = 0)
         {
             neuron.setWeightsCorrections(expected, inputDifference);
@@ -59,7 +76,13 @@ namespace NeuralNetwork
             {
                 this.propagate(this.getNeuron(neuron.layerNumber - 1, i), expected, neuron.inputDifferences[i]);
             }
-
+        }
+        public void applyWeightsCorrections()
+        {
+            foreach(Layer layer in this.layers)
+            {
+                layer.applyWeightsCorrections();
+            }
         }
     }
 }

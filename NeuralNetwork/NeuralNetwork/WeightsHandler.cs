@@ -9,9 +9,9 @@ namespace NeuralNetwork
 {
     class WeightsHandler
     {
-        public static void saveWeights(Dictionary<int[], List<double>>weights)
+        public static void saveWeights(Dictionary<int[], List<double>>weights, string path)
         {
-            TextWriter tw = new StreamWriter("weights.txt");
+            TextWriter tw = new StreamWriter(path);
             string line;
             foreach (var item in weights)
             {

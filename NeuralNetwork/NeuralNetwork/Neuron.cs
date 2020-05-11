@@ -24,6 +24,11 @@ namespace NeuralNetwork
         {
             this.weights = new List<double>(weights);
         }
+        public KeyValuePair<int[],List<double>> getWeights()
+        {
+            var weights = new KeyValuePair<int[], List<double>>(new int[] { this.layerNumber, this.neuronNumber }, this.weights );
+            return weights;
+        }
 
         public double calculateOutput(List<double>inputs)
         {
@@ -79,6 +84,13 @@ namespace NeuralNetwork
             double weightCorrection;
             weightCorrection = Calculation.calculateWeightDifference(sumDifference, input);
             return weightCorrection;
+        }
+        public void applyWeightsCorrection()
+        {
+            for (int i = 0; i < this.weights.Count; i++)
+            {
+                this.weights[i] += this.weightsCorrections[i];
+            }
         }
     }
    

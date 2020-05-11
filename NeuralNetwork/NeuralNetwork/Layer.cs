@@ -31,6 +31,15 @@ namespace NeuralNetwork
         {
             neurons[neuronNumber].setWeights(weights);
         }
+        public List<KeyValuePair<int[], List<double>>> getWeights()
+        {
+            var weights = new List<KeyValuePair<int[], List<double>>>();
+            foreach (Neuron neuron in this.neurons)
+            {
+                weights.Add(neuron.getWeights());
+            }
+            return weights;
+        }
         public List<double> calcualteOutput(List<double>inputs)
         {
             List<double> outputsFromLayer = new List<double>();
@@ -40,6 +49,13 @@ namespace NeuralNetwork
                 outputsFromLayer.Add(neuronOutput);
             }
             return outputsFromLayer;
+        }
+        public void applyWeightsCorrections()
+        {
+            foreach(Neuron neuron in this.neurons)
+            {
+                neuron.applyWeightsCorrection();
+            }
         }
     }
 }

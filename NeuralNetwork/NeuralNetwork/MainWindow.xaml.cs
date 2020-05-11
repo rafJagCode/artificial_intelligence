@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,11 @@ namespace NeuralNetwork
     /// </summary>
     public partial class MainWindow : Window
     {
+        delegate void printDelegate();
         string result;
+        Network testNetwork;
+        Learning testLearn = new Learning();
+        StringBuilder difference = new StringBuilder();
         public MainWindow()
         {
             InitializeComponent();
@@ -30,22 +35,46 @@ namespace NeuralNetwork
         {
             var networkStructure = new List<int> { 2, 2, 1 };
             var testConfiguration = new Configuration(networkStructure);
-            var testNetwork = new Network(testConfiguration);
+            testNetwork = new Network(testConfiguration);
             //var weights = WeightGenerator.getRandomWeights(networkStructure);
-            var weights = WeightsHandler.loadWeights("weights.txt");
+            var weights = WeightsHandler.loadWeights("learningEffects.txt");
             testNetwork.setWeights(weights);
-            testNetwork.calculateOutput(new List<double> { 1, 0 });
-            testNetwork.propagate(testNetwork.getNeuron(1, 0), 1);
-            result = testNetwork.getNetworkAsJson()+"\n";
-            var cor = testNetwork.getNeuron(0, 1).weightsCorrections;
-            foreach(double c in cor)
-            {
-                result += c.ToString() + '\n';
-            }
-            resultBox.Text = result;
 
-            //WeightsHandler.saveWeights(weights);
-            //var test = WeightsHandler.loadWeights("weights.txt");
+
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.ProgressChanged += worker_ProgressChanged;
+            worker.DoWork += worker_DoWork;
+     
+            if (worker.IsBusy != true)
+            {
+                worker.RunWorkerAsync();
+            }
         }
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            
+            testLearn.addTestingSamples();
+            testLearn.learn(testNetwork, 200000, worker);
+            var weightsAfterLearning = testNetwork.getWeights();
+            WeightsHandler.saveWeights(weightsAfterLearning, "learningEffects.txt");
+
+        }
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch (e.UserState)
+            {
+                case null:
+                    progressBar.Value = e.ProgressPercentage;
+                    break;
+                default:
+                    difference.Append(e.UserState.ToString() + '\n');
+                    resultBox.Text = difference.ToString();
+                    break;
+            }
+            if (progressBar.Value == 100) resultBox.Text = testLearn.checkError(testNetwork);
+        }
+
     }
 }

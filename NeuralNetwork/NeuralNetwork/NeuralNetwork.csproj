@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Layer.cs" />
+    <Compile Include="Learning.cs" />
     <Compile Include="WeightGenerator.cs" />
     <Compile Include="WeightsHandler.cs" />
     <Page Include="MainWindow.xaml">
@@ -72,8 +73,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Input.cs" />
-    <Compile Include="Inputs.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
