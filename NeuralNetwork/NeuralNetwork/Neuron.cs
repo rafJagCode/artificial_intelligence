@@ -30,12 +30,12 @@ namespace NeuralNetwork
             return weights;
         }
 
-        public double calculateOutput(List<double>inputs)
+        public double calculateOutput(List<double>inputs, double beta)
         {
             this.inputs = new List<double>(inputs);
             this.inputs.Insert(0,this.hiddenInputValue);
             this.sum = Calculation.calcualateSum(this.inputs, this.weights);
-            this.output= Calculation.calcualateActivation(sum);
+            this.output= Calculation.calcualateActivation(sum, beta);
             return this.output;
 
         }
@@ -53,11 +53,11 @@ namespace NeuralNetwork
             }
             this.inputDifferences = inputDifferences;
         }
-        public void setWeightsCorrections(double expected = 0, double inputDifference = 0)
+        public void setWeightsCorrections(double expected, double beta, double learningFactor, double inputDifference = 0)
         {
             var weightsCorrections = new List<double>();
-            double outputDifference = calcualateOutputDifference(expected, inputDifference);
-            double sumDifference = Calculation.calculateSumDifference(outputDifference, this.sum);
+            double outputDifference = calcualateOutputDifference(expected, learningFactor, inputDifference);
+            double sumDifference = Calculation.calculateSumDifference(outputDifference, this.sum, beta);
             setInputDifferences(sumDifference);
             for (int i = 0; i < this.inputs.Count; i++)
             {
@@ -66,12 +66,12 @@ namespace NeuralNetwork
             }
             this.weightsCorrections = weightsCorrections;
         }
-        public double calcualateOutputDifference(double expected = 0, double inputDifference = 0)
+        public double calcualateOutputDifference(double expected, double learningFactor, double inputDifference = 0)
         {
             double outputDifference;
             if (this.isOutputNeuron)
             {
-                outputDifference = Calculation.calculateCorrection(expected, this.output);
+                outputDifference = Calculation.calculateCorrection(expected, this.output, learningFactor);
             }
             else
             {

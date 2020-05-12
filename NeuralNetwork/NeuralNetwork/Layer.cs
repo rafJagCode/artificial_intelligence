@@ -40,12 +40,12 @@ namespace NeuralNetwork
             }
             return weights;
         }
-        public List<double> calcualteOutput(List<double>inputs)
+        public List<double> calcualteOutput(List<double>inputs,double beta)
         {
             List<double> outputsFromLayer = new List<double>();
             foreach(Neuron neuron in this.neurons)
             {
-                double neuronOutput = neuron.calculateOutput(inputs);
+                double neuronOutput = neuron.calculateOutput(inputs,beta);
                 outputsFromLayer.Add(neuronOutput);
             }
             return outputsFromLayer;

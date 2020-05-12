@@ -17,13 +17,18 @@ namespace NeuralNetwork
             }
             return result;
         }
-        public static double calcualateActivation(double sum)
+        public static double calcualateActivation(double sum, double beta)
         {
-            return 1 / (1+Math.Pow(Math.E, (-1 * sum)));
+            return 1 / (1+Math.Pow(Math.E, (-1 * beta * sum)));
         }
-        public static double calculateCorrection(double expected, double received, double learningFactor=0.1)
+        public static double calculateError(double expected, double received)
         {
-            double correction = learningFactor * Math.Abs(expected - received);
+            double error = expected - received;
+            return error;
+        }
+        public static double calculateCorrection(double expected, double received, double learningFactor)
+        {
+            double correction = learningFactor * calculateError(expected, received);
             return correction;
         }
         public static double calculateOutputDifference(double outputSumDifference, double weight)
@@ -32,10 +37,10 @@ namespace NeuralNetwork
             outputDifference = outputSumDifference * weight;
             return 1;
         }
-        public static double calculateSumDifference(double outputDifference, double sum, double beta = 1)
+        public static double calculateSumDifference(double outputDifference, double sum, double beta)
         {
             double sumDifference;
-            double fx = calcualateActivation(sum);
+            double fx = calcualateActivation(sum, beta);
             sumDifference = outputDifference * beta * fx * (1 - fx);
             return sumDifference;
         }

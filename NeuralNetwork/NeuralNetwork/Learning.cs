@@ -12,27 +12,30 @@ namespace NeuralNetwork
 {
     class Learning
     {
-        List<List<double>> testSamples = new List<List<double>> {
+        public List<List<double>> learningSamples = new List<List<double>> {
             new List<double>{0, 0, 0},
             new List<double> { 0, 1, 1 },
             new List<double> { 1, 0, 1 },
             new List<double> { 1, 1, 0 }
         };
-        public void addTestingSamples()
+        public void addLearningSamples()
         {
-            addSamples(this.testSamples);
+            addSamples(this.learningSamples);
         }
-        public string checkError(Network network)
+        public string checkError(Network network, List<List<double>> samples, double beta)
         {
-            string errors = "";
-            foreach(var sample in this.testSamples)
+            string raport = "";
+            foreach(var sample in this.learningSamples)
             {
                 List<double> inputs = sample.GetRange(0, sample.Count - 1);
-                double output = network.calculateOutput(inputs);
-                double error = Calculation.calculateCorrection(sample.Last(), output);
-                errors += error.ToString()+'\n';
+                double output = network.calculateOutput(inputs, beta);
+                double error = Calculation.calculateError(sample.Last(), output);
+                raport += "**********Sample*********\n";
+                raport += '\t' + "expected output: " + sample.Last().ToString() + '\n';
+                raport += '\t' + "received output: " + output.ToString() + '\n';
+                raport += '\t' + "error: " + error.ToString() + '\n';
             }
-            return errors;
+            return raport;
         }
 
         List<List<double>> samples = new List<List<double>>();
@@ -62,12 +65,12 @@ namespace NeuralNetwork
             list[j] = temp;
         }
 
-        public void learn(Network network, int epochAmount, BackgroundWorker worker)
+        public void learn(Network network, int epochAmount, BackgroundWorker worker, double beta, double learningFactor)
         {
             double progress = 0;
             for (int i = 0; i < epochAmount; i++)
             {
-                epoch(network, worker);
+                epoch(network, beta, learningFactor);
                 shuffle(this.samples, this.rnd);
                 double progressNow = (double)(i+1) / epochAmount * 100;
                 if(progressNow >= progress + 1)
@@ -78,15 +81,14 @@ namespace NeuralNetwork
             }
             worker.ReportProgress(100);
         }
-        public void epoch(Network network, BackgroundWorker worker)
+        public void epoch(Network network, double beta, double learningFactor)
         {
             foreach (var sample in this.samples)
             {
                 var inputs = sample.GetRange(0, sample.Count - 1);
-                var output = network.calculateOutput(inputs);
-                var error = Calculation.calculateCorrection(sample.Last(), output);
-                //worker.ReportProgress(0,error);
-                network.propagate(network.getOutputNeuron(),sample.Last());
+                var output = network.calculateOutput(inputs, beta);
+                var error = Calculation.calculateCorrection(sample.Last(), output, learningFactor);
+                network.propagate(network.getOutputNeuron(),sample.Last(), beta, learningFactor);
                 network.applyWeightsCorrections();
             }
         }

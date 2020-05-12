@@ -48,14 +48,14 @@ namespace NeuralNetwork
             }
             return weights;
         }
-        public double calculateOutput(List<double> inputs)
+        public double calculateOutput(List<double> inputs,double beta)
         {
             List<double> output = new List<double> ();
 
             foreach(Layer layer in this.layers)
             {
-                if (layer == layers.First()) output = layer.calcualteOutput(inputs);
-                else output = layer.calcualteOutput(output);
+                if (layer == layers.First()) output = layer.calcualteOutput(inputs,beta);
+                else output = layer.calcualteOutput(output,beta);
             }
             return output.First();
         }
@@ -68,13 +68,13 @@ namespace NeuralNetwork
             Neuron outputNeuron = this.layers.Last().neurons[0];
             return outputNeuron;
         }
-        public void propagate(Neuron neuron, double expected=0, double inputDifference = 0)
+        public void propagate(Neuron neuron, double expected, double beta, double learningFactor, double inputDifference = 0)
         {
-            neuron.setWeightsCorrections(expected, inputDifference);
+            neuron.setWeightsCorrections(expected, beta, learningFactor, inputDifference);
             if (neuron.layerNumber == 0) return;
             for (int i = 0; i < neuron.inputs.Count-1; i++)
             {
-                this.propagate(this.getNeuron(neuron.layerNumber - 1, i), expected, neuron.inputDifferences[i]);
+                this.propagate(this.getNeuron(neuron.layerNumber - 1, i), expected,beta, learningFactor, neuron.inputDifferences[i]);
             }
         }
         public void applyWeightsCorrections()
