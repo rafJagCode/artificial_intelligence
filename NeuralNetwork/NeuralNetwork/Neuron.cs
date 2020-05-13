@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 namespace NeuralNetwork
 {
     class Neuron
@@ -7,11 +6,11 @@ namespace NeuralNetwork
         public List<double> inputDifferences;
         public List<double> weightsCorrections;
         public int layerNumber;
-        [JsonProperty] int neuronNumber;
-        [JsonProperty] double hiddenInputValue=1;
-        [JsonProperty] List<double> weights;
-        [JsonProperty] double sum;
-        [JsonProperty] double output;
+        int neuronNumber;
+        double hiddenInputValue=1;
+        List<double> weights;
+        double sum;
+        double output;
         public List<double> inputs;
         bool isOutputNeuron = false;
         public Neuron(int layerNumber, int neuronNumber, bool isOutputNeuron)
@@ -38,10 +37,6 @@ namespace NeuralNetwork
             this.output= Calculation.calcualateActivation(sum, beta);
             return this.output;
 
-        }
-        public string getNeuronAsJson()
-        {
-            return JsonConvert.SerializeObject(this,Formatting.Indented);
         }
         public void setInputDifferences(double sumDifference)
         {

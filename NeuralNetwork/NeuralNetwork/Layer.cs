@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +9,8 @@ namespace NeuralNetwork
     class Layer
     {
         int amountOfNeurons;
-        [JsonProperty] int layerNumber;
-        [JsonProperty] public Neuron[] neurons;
+        int layerNumber;
+        public Neuron[] neurons;
         public Layer(KeyValuePair<int, int> layerInfo, int lastLayerNumber)
         { 
             this.layerNumber = layerInfo.Key;

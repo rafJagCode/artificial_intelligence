@@ -21,10 +21,9 @@ namespace NeuralNetwork
     /// </summary>
     public partial class MainWindow : Window
     {
-        delegate void printDelegate();
+        
         Network testNetwork;
         Learning testLearn = new Learning();
-        StringBuilder difference = new StringBuilder();
         public MainWindow()
         {
             InitializeComponent();
@@ -66,15 +65,10 @@ namespace NeuralNetwork
         }
         private void checkBtn_Click(object sender, RoutedEventArgs e)
         {
-            Configuration configuration = new Configuration(new List<int> { 2, 2, 1 });
-            Network fromClasses = new Network(configuration);
-            var weights = new Dictionary<int[], List<double>>();
-            weights.Add(new int[] { 0, 0 }, new List<double> { 0.3, 0.1, 0.2 });
-            weights.Add(new int[] { 0, 1 }, new List<double> { 0.6, 0.4, 0.5 });
-            weights.Add(new int[] { 1, 0 }, new List<double> { 0.9, 0.7, -0.8 });
-            fromClasses.setWeights(weights);
-            var inputs = new List<double> { 1, 0 };
-            double output = fromClasses.calculateOutput(inputs,1);
+            var test = new TestingObjects();
+            Network fromClasses = new Network(test.configuration);
+            fromClasses.setWeights(test.weights);
+            double output = fromClasses.calculateOutput(test.inputs,1);
             fromClasses.propagate(fromClasses.getOutputNeuron(), 1,1,0.1);
             fromClasses.applyWeightsCorrections();
             var newWeights = fromClasses.getWeights();

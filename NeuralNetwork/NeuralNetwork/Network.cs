@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +9,7 @@ namespace NeuralNetwork
     class Network
     {
         int lastLayerNumber;
-        [JsonProperty] public Layer[] layers;
+        public Layer[] layers;
         public Network(Configuration networkConfiguration)
         {
             this.lastLayerNumber = networkConfiguration.amountOfLayers - 1;
@@ -24,10 +23,6 @@ namespace NeuralNetwork
                 Layer newLayer = new Layer(layerInfo, this.lastLayerNumber);
                 this.layers[layerInfo.Key] = newLayer;
             }
-        }
-        public string getNetworkAsJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
         public void setWeights(Dictionary<int[],List<double>>weights)
         {
