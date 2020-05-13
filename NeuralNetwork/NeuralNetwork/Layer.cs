@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    class Layer
+    public class Layer
     {
         int amountOfNeurons;
         int layerNumber;

@@ -13,13 +13,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace NeuralNetwork
 {
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         
         Network testNetwork;
@@ -69,10 +70,37 @@ namespace NeuralNetwork
             Network fromClasses = new Network(test.configuration);
             fromClasses.setWeights(test.weights);
             double output = fromClasses.calculateOutput(test.inputs,1);
+            resultBox.Text = output.ToString();
             fromClasses.propagate(fromClasses.getOutputNeuron(), 1,1,0.1);
             fromClasses.applyWeightsCorrections();
             var newWeights = fromClasses.getWeights();
+
             WeightsHandler.saveWeights(newWeights, "test.txt");
+        }
+
+        private void loadLearningSamplesBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void createNetworkBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void loadWeightsBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void saveWeightsBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void generateRandomWeightsBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void learnBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

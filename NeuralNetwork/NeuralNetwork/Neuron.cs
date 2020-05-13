@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 namespace NeuralNetwork
 {
-    class Neuron
+    public class Neuron
     {
         public List<double> inputDifferences;
         public List<double> weightsCorrections;

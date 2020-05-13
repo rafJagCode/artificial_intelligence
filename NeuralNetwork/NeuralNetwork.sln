@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2019
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{230F9C2E-09F2-42AC-A7D4-D08AF345A993}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork.Unit.Tests", "NeuralNetwork.Unit.Tests\NeuralNetwork.Unit.Tests.csproj", "{1FA56F13-A498-43F4-8039-8B942AD033BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{230F9C2E-09F2-42AC-A7D4-D08AF345A993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{230F9C2E-09F2-42AC-A7D4-D08AF345A993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{230F9C2E-09F2-42AC-A7D4-D08AF345A993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FA56F13-A498-43F4-8039-8B942AD033BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA56F13-A498-43F4-8039-8B942AD033BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA56F13-A498-43F4-8039-8B942AD033BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA56F13-A498-43F4-8039-8B942AD033BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
