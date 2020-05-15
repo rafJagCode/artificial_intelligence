@@ -65,9 +65,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigurationForm.cs" />
+    <Compile Include="FormValidation.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Learning.cs" />
-    <Compile Include="TestingObjects.cs" />
     <Compile Include="WeightGenerator.cs" />
     <Compile Include="WeightsHandler.cs" />
     <Page Include="MainWindow.xaml">

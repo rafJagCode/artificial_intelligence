@@ -8,7 +8,7 @@ namespace NeuralNetwork
         public int layerNumber;
         int neuronNumber;
         double hiddenInputValue=1;
-        List<double> weights;
+        public List<double> weights;
         double sum;
         double output;
         public List<double> inputs;
