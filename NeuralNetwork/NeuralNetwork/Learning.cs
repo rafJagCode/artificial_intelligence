@@ -12,41 +12,41 @@ namespace NeuralNetwork
 {
     class Learning
     {
-        public List<List<double>> learningSamples = new List<List<double>> {
-            new List<double>{0, 0, 0},
-            new List<double> { 0, 1, 1 },
-            new List<double> { 1, 0, 1 },
-            new List<double> { 1, 1, 0 }
-        };
-        public void addLearningSamples()
-        {
-            addSamples(this.learningSamples);
-        }
-        public string checkError(Network network, List<List<double>> samples, double beta)
-        {
-            string raport = "";
-            foreach(var sample in this.learningSamples)
-            {
-                List<double> inputs = sample.GetRange(0, sample.Count - 1);
-                double output = network.calculateOutput(inputs, beta);
-                double error = Calculation.calculateError(sample.Last(), output);
-                raport += "**********Sample*********\n";
-                raport += '\t' + "expected output: " + sample.Last().ToString() + '\n';
-                raport += '\t' + "received output: " + output.ToString() + '\n';
-                raport += '\t' + "error: " + error.ToString() + '\n';
-            }
-            return raport;
-        }
-
         List<List<double>> samples = new List<List<double>>();
         Random rnd = new Random();
+        public Learning(string[] text)
+        {
+            addSamples(text);
+        }
+        List<List<double>> convertTextToList(string[] text)
+        {
+            var samples = new List<List<double>>();
+            foreach(string row in text)
+            {
+                var sample = convertStringToList(row);
+                samples.Add(sample);
+            }
+            return samples;
+        }
+        List<double>convertStringToList(string row)
+        {
+            var sample = new List<double>();
+            string[] splitedSample = row.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach(string value in splitedSample)
+            {
+                double data = double.Parse(value);
+                sample.Add(data);
+            }
+            return sample;
+        }
         public void addSample(List<double> sample)
         {
             var copiedSample = new List<double>(sample);
             this.samples.Add(copiedSample);
         }
-        public void addSamples(List<List<double>>samples)
+        public void addSamples(string[] text)
         {
+            var samples = convertTextToList(text);
             foreach(var sample in samples)
             {
                 addSample(sample);

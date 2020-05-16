@@ -16,12 +16,12 @@ namespace NeuralNetwork
             bool isDouble = double.TryParse(betaString, out beta);
             if (!isDouble)
             {
-                message = "Bad beta format";
+                message = "Zły format bety";
                 return false;
             }
             if (beta <= 0)
             {
-                message = "Beta must be greater than 0";
+                message = "Beta musi być większa od zera";
                 return false;
             }
             message = "OK";
@@ -34,12 +34,12 @@ namespace NeuralNetwork
             bool isDouble = double.TryParse(learningFactorString, out learningFactor);
             if (!isDouble)
             {
-                message = "Bad learning factor format";
+                message = "Zły format współczynnika nauki";
                 return false;
             }
             if (learningFactor <= 0 || learningFactor >=1)
             {
-                message = "Learning factor must be between 0 and 1";
+                message = "Współczynnik nauczania musi być liczbą z zakresu 0 do 1";
                 return false;
             }
             message = "OK";
@@ -52,12 +52,12 @@ namespace NeuralNetwork
             bool isInt = int.TryParse(epochAmountString, out epochAmount);
             if (!isInt)
             {
-                message = "Epoch amount must be an integer";
+                message = "Liczba epok musi być liczbą całkowitą";
                 return false;
             }
             if (epochAmount <= 0)
             {
-                message = "Epoch amount must be greater than 0";
+                message = "Liczba epok musi być większa od zera";
                 return false;
             }
             message = "OK";
@@ -66,6 +66,11 @@ namespace NeuralNetwork
         public static bool isConfigurationValid(TextBox configurationBox, out string message)
         {
             string configurationString = configurationBox.Text;
+            if (configurationString == string.Empty)
+            {
+                message = "Konfiguracja jest wymagana do stworzenia sieci";
+                return false;
+            }
             string[] configuration = configurationString.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < configuration.Length; i++)
             {
@@ -73,30 +78,39 @@ namespace NeuralNetwork
                 bool isInt = int.TryParse(configuration[i], out parsed);
                 if (!isInt)
                 {
-                    message = "Configuration must consist of integers";
+                    message = "Konfiguracja musi składać się z liczb całkowitych oddzielonych tabulatorem";
+                    return false;
+                }
+                if (parsed <= 0)
+                {
+                    message = "Konfiguracja powinna składać się z liczb większych od zera";
                     return false;
                 }
                 if (i == configuration.Length - 1)
                     if (parsed != 1)
                     {
-                        message = "Should be only one output";
+                        message = "Sieć powinna mieć jeden neuron wyjściowy";
                         return false;
                     }
             }
             message = "OK";
             return true;
         }
-        public static bool isInputValid(TextBox inputBox, out string message)
+        public static bool isInputValid(Configuration configuration, TextBox inputBox, out string message)
         {
             string inputString = inputBox.Text;
             string[] input = inputString.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (input.Length != configuration.amountOfInputs)
+            {
+                message = "Podano ilość danych wejściowych nie zgodną z konfiguracją sieci";
+            }
             for (int i = 0; i < input.Length; i++)
             {
                 double parsed;
                 bool isDouble = double.TryParse(input[i], out parsed);
                 if (!isDouble)
                 {
-                    message = "Configuration must consist of doubles";
+                    message = "Dane wejściowe powinny być podane za pomocą liczb zmiennoprzecinkowych";
                     return false;
                 }
             }
@@ -114,17 +128,17 @@ namespace NeuralNetwork
                 bool neuronNumberCanBeParsed = int.TryParse(splited[1], out neuronNumber);
                 if(!layerNumberCanBeParsed || !neuronNumberCanBeParsed)
                 {
-                    message = "There was some problem with parsing in neuron identificator";
+                    message = "Wystąpił problem z numerem warstwy lub neuronu";
                     return false;
                 }
                 if (neuronNumber > configuration[layerNumber + 1])
                 {
-                    message = "Amount of neurons in layers is specified otherwise in configuration";
+                    message = "Ilość neuronów nie zgadza się z ustawioną konfiguracją sieci";
                     return false;
                 }
-                if (configuration[layerNumber] != splited.Length - 2)
+                if (configuration[layerNumber] != splited.Length - 3)
                 {
-                    message = "There is different weight amount specified by configuration then in file";
+                    message = "Ilość wag nie zgadza się z ustawioną konfiguracja sieci";
                     return false;
                 }
                 for (int i = 2; i < splited.Length; i++)
@@ -133,7 +147,7 @@ namespace NeuralNetwork
                     bool weightCanBeParsed = double.TryParse(splited[i], out weight);
                     if (!weightCanBeParsed)
                     {
-                        message = "weights must be double";
+                        message = "Wagi musza być zapisane jako liczby zmiennoprzecinkowe";
                         return false;
                     }
                 }
@@ -141,5 +155,30 @@ namespace NeuralNetwork
             message = "OK";
             return true;
         }
+        public static bool areLearningSamplesValid(Configuration configuration, string[]text, out string message )
+        {
+            foreach(string sample in text)
+            {
+                string[] splitedSample = sample.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                if (splitedSample.Length - 1 != configuration.amountOfInputs)
+                {
+                    message = "Ilość danych wejściowych musi zgadzać sie z konfiguracją sieci";
+                    return false;
+                }
+                foreach (string number in splitedSample)
+                {
+                    double value;
+                    bool canBeParsed = double.TryParse(number, out value);
+                    if (!canBeParsed)
+                    {
+                        message = "Próbki powinny zapisane być jako liczby zmiennoprzecinkowe";
+                        return false;
+                    }
+                }
+            }
+            message = "OK";
+            return true;
+        }
+        
     }
 }

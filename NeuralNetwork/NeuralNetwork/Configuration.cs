@@ -8,12 +8,25 @@ namespace NeuralNetwork
 {   
     public class Configuration
     {
-        int amountOfInputs;
+        public int amountOfInputs;
         public int amountOfLayers;
+        public List<int> networkStructure;
         public Dictionary<int, int> neuronConfiguration= new Dictionary<int, int>();
-        public Configuration(List<int> data)
+        public Configuration(string configurationString)
         {
-            loadConfiguration(data);
+            var configurationList = convertStringToList(configurationString);
+            loadConfiguration(configurationList);
+        }
+        List<int> convertStringToList(string configurationString)
+        {
+            var configuration = new List<int>();
+            string[] configurationArray = configurationString.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach(string configurationData in configurationArray)
+            {
+                configuration.Add(int.Parse(configurationData));
+            }
+            this.networkStructure = configuration;
+            return configuration;
         }
         public void loadConfiguration(List<int>data)
         {
