@@ -56,7 +56,7 @@ namespace NeuralNetwork
             }
             string path = openFileDialog.FileName;
             string[] learningSamples = File.ReadAllLines(path);
-            if(!FormValidation.areLearningSamplesValid(configuration, learningSamples, out string message))
+            if (!FormValidation.areLearningSamplesValid(configuration, learningSamples, out string message))
             {
                 learningSamplesStatus.Content = message;
                 return;
@@ -65,7 +65,8 @@ namespace NeuralNetwork
         }
         private void createNetworkBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(!FormValidation.isConfigurationValid(configurationBox, out string configurationError)){
+            if (!FormValidation.isConfigurationValid(configurationBox, out string configurationError))
+            {
                 networkStatus.Content = configurationError;
                 return;
             }
@@ -80,7 +81,7 @@ namespace NeuralNetwork
                 weightsStatus.Content = "Stwórz najpierw sieć";
                 return;
             }
-            
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Environment.CurrentDirectory;
             openFileDialog.Filter = "txt files (*.txt)|*.txt";
@@ -94,17 +95,19 @@ namespace NeuralNetwork
             string path = openFileDialog.FileName;
             string[] weightsString = File.ReadAllLines(path);
 
-            if(!FormValidation.areWeightsValid(configuration.networkStructure, weightsString, out string message)){
+            if (!FormValidation.areWeightsValid(configuration.networkStructure, weightsString, out string message))
+            {
                 weightsStatus.Content = message;
                 return;
             }
             weights = WeightsHandler.loadWeights(path);
+            network.setWeights(weights);
             weightsStatus.Content = "Załadowano wagi";
             weightsLoaded = true;
         }
         private void saveWeightsBtn_Click(object sender, RoutedEventArgs e)
         {
-            
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.CurrentDirectory;
             saveFileDialog.Filter = "txt files (*.txt)|*.txt";
@@ -130,6 +133,7 @@ namespace NeuralNetwork
                 return;
             }
             weights = WeightGenerator.getRandomWeights(configuration.networkStructure);
+            network.setWeights(weights);
             weightsStatus.Content = "Losowe wagi zaladowane";
             weightsLoaded = true;
         }
@@ -150,7 +154,7 @@ namespace NeuralNetwork
                 learningStatus.Content = "Załaduj najpierw próbki uczące";
                 return;
             }
-            if(!FormValidation.isBetaValid(betaBox, out string betaMessage))
+            if (!FormValidation.isBetaValid(betaBox, out string betaMessage))
             {
                 learningStatus.Content = betaMessage;
                 return;
@@ -180,7 +184,7 @@ namespace NeuralNetwork
                 return;
             }
             worker.RunWorkerAsync();
-            
+
         }
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -191,6 +195,27 @@ namespace NeuralNetwork
         {
             progressBar.Value = e.ProgressPercentage;
             if (progressBar.Value == 100) learningStatus.Content = "Uczenie zakończone";
+        }
+        private void outputBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (network == null)
+            {
+                resultBox.Text = "Najpierw stwórz sieć";
+                return;
+            }
+            if (!FormValidation.isBetaValid(inputBetaBox, out string message))
+            {
+                resultBox.Text = message;
+                return;
+            }
+            if (!FormValidation.isInputValid(configuration, inputBox, out string inputMessage))
+            {
+                resultBox.Text = inputMessage;
+                return;
+            }
+            double inputBeta = double.Parse(inputBetaBox.Text);
+            var inputs = Tools.convertStringToDoubleList(inputBox.Text);
+            resultBox.Text = network.calculateOutput(inputs, inputBeta).ToString();
         }
     }
 }

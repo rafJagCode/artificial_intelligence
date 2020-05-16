@@ -13,6 +13,7 @@ namespace NeuralNetwork
         double output;
         public List<double> inputs;
         bool isOutputNeuron = false;
+        double outputDifference;
         public Neuron(int layerNumber, int neuronNumber, bool isOutputNeuron)
         {
             this.isOutputNeuron = isOutputNeuron;
@@ -51,7 +52,7 @@ namespace NeuralNetwork
         public void setWeightsCorrections(double expected, double beta, double learningFactor, double inputDifference = 0)
         {
             var weightsCorrections = new List<double>();
-            double outputDifference = calcualateOutputDifference(expected, learningFactor, inputDifference);
+            this.outputDifference = calcualateOutputDifference(expected, learningFactor, inputDifference);
             double sumDifference = Calculation.calculateSumDifference(outputDifference, this.sum, beta);
             setInputDifferences(sumDifference);
             for (int i = 0; i < this.inputs.Count; i++)
@@ -63,16 +64,15 @@ namespace NeuralNetwork
         }
         public double calcualateOutputDifference(double expected, double learningFactor, double inputDifference = 0)
         {
-            double outputDifference;
             if (this.isOutputNeuron)
             {
-                outputDifference = Calculation.calculateCorrection(expected, this.output, learningFactor);
+                this.outputDifference = Calculation.calculateCorrection(expected, this.output, learningFactor);
             }
             else
             {
-                outputDifference = inputDifference;
+                this.outputDifference += inputDifference;
             }
-            return outputDifference;
+            return this.outputDifference;
         }
         public double getWeightCorrection(double sumDifference, double input)
         {
@@ -82,6 +82,7 @@ namespace NeuralNetwork
         }
         public void applyWeightsCorrection()
         {
+            this.outputDifference = 0;
             for (int i = 0; i < this.weights.Count; i++)
             {
                 this.weights[i] += this.weightsCorrections[i];

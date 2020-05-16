@@ -69,6 +69,7 @@
     <Compile Include="FormValidation.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Learning.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="WeightGenerator.cs" />
     <Compile Include="WeightsHandler.cs" />
     <Page Include="MainWindow.xaml">

@@ -12,7 +12,7 @@ namespace NeuralNetwork.Unit.Tests
         public void Propagate_ExampleFromClasses_ReturnsPreciselyDefinedWeights()
         {
             //Arrange
-            var configuration = new Configuration(new List<int> { 2, 2, 1 });
+            var configuration = new Configuration("2\t2\t1");
             var network = new Network(configuration);
             var weights = new Dictionary<int[], List<double>>
             {
