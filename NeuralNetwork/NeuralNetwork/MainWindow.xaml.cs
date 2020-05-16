@@ -74,8 +74,7 @@ namespace NeuralNetwork
             }
             configuration = new Configuration(configurationBox.Text);
             network = new Network(configuration);
-            weightsLoaded = false;
-            weightsStatus.Content = "Wagi nie załadowane";
+            reset();
             networkStatus.Content = "Sieć utworzona";
         }
         private void loadWeightsBtn_Click(object sender, RoutedEventArgs e)
@@ -125,8 +124,9 @@ namespace NeuralNetwork
             {
                 return;
             }
-            if (saveFileDialog.FileName != "")
+            if (saveFileDialog.FileName == "")
             {
+                savingStatus.Content = "Wagi nie zapisane, plik musi mieć nazwę";
                 return;
             }
             var path = saveFileDialog.FileName;
@@ -243,6 +243,24 @@ namespace NeuralNetwork
             double output = network.calculateOutput(inputs, inputBeta);
             double denormalizedOutput = Tools.getDenormalizedValue(output, min, max);
             resultBox.Text = denormalizedOutput.ToString();
+        }
+        public void reset()
+        {
+            learning = null;
+            learningSamplesStatus.Content = "Próbki nie załadowane";
+            weightsLoaded = false;
+            weightsStatus.Content = "Wagi nie załadowane";
+            inputBetaBox.Text = "";
+            inputBetaBox.Text = "";
+            resultBox.Text = "";
+            minBox.Text = "";
+            maxBox.Text = "";
+            savingStatus.Content = "";
+            learningStatus.Content = "";
+            betaBox.Text = "";
+            learningFactorBox.Text = "";
+            epochAmountBox.Text = "";
+            denormalizationBox.Text = "";
         }
     }
 }
