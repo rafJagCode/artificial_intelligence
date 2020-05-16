@@ -9,11 +9,11 @@ namespace NeuralNetwork
         int neuronNumber;
         double hiddenInputValue=1;
         public List<double> weights;
-        double sum;
-        double output;
+        public double sum;
+        public double output;
         public List<double> inputs;
         bool isOutputNeuron = false;
-        double outputDifference;
+        public double outputDifference;
         public Neuron(int layerNumber, int neuronNumber, bool isOutputNeuron)
         {
             this.isOutputNeuron = isOutputNeuron;

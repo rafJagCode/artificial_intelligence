@@ -78,7 +78,7 @@ namespace NeuralNetwork
                 bool isInt = int.TryParse(configuration[i], out parsed);
                 if (!isInt)
                 {
-                    message = "Konfiguracja musi składać się z liczb całkowitych oddzielonych tabulatorem";
+                    message = "Konfiguracja musi składać się z liczb naturalnych oddzielonych tabulatorem";
                     return false;
                 }
                 if (parsed <= 0)
@@ -102,7 +102,7 @@ namespace NeuralNetwork
             string[] input = inputString.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
             if (input.Length != configuration.amountOfInputs)
             {
-                message = "Podano ilość danych wejściowych nie zgodną z konfiguracją sieci";
+                message = "Podano ilość danych wejściowych nie zgadza się z konfiguracją";
             }
             for (int i = 0; i < input.Length; i++)
             {
@@ -133,7 +133,7 @@ namespace NeuralNetwork
                 }
                 if (neuronNumber > configuration[layerNumber + 1])
                 {
-                    message = "Ilość neuronów nie zgadza się z ustawioną konfiguracją sieci";
+                    message = "Ilość neuronów nie zgadza się z konfiguracją sieci";
                     return false;
                 }
                 if (configuration[layerNumber] != splited.Length - 3)
@@ -162,7 +162,7 @@ namespace NeuralNetwork
                 string[] splitedSample = sample.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 if (splitedSample.Length - 1 != configuration.amountOfInputs)
                 {
-                    message = "Ilość danych wejściowych musi zgadzać sie z konfiguracją sieci";
+                    message = "Ilość danych wejściowych nie zgodna z konfiguracją";
                     return false;
                 }
                 foreach (string number in splitedSample)
@@ -179,6 +179,29 @@ namespace NeuralNetwork
             message = "OK";
             return true;
         }
-        
+        public static bool isMinValid(TextBox minBox, out string message)
+        {
+            double parsed;
+            bool canBeParsed = double.TryParse(minBox.Text, out parsed);
+            if (!canBeParsed)
+            {
+                message = "Zły format min";
+                return false;
+            }
+            message = "OK";
+            return true;
+        }
+        public static bool isMaxValid(TextBox maxBox, out string message)
+        {
+            double parsed;
+            bool canBeParsed = double.TryParse(maxBox.Text, out parsed);
+            if (!canBeParsed)
+            {
+                message = "Zły format max";
+                return false;
+            }
+            message = "OK";
+            return true;
+        }
     }
 }

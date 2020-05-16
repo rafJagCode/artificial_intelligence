@@ -14,9 +14,22 @@ namespace NeuralNetwork
     {
         List<List<double>> samples = new List<List<double>>();
         Random rnd = new Random();
+        public List<double> decisions = new List<double>();
+        public double min;
+        public double max;
         public Learning(string[] text)
         {
             addSamples(text);
+            this.min = Tools.findMinInDoubleList(this.decisions);
+            this.max = Tools.findMaxInDoubleList(this.decisions);
+            normalizeOutputs();
+        }
+        void normalizeOutputs()
+        {
+            foreach(var sample in this.samples)
+            {
+                sample[sample.Count - 1] = Tools.getNormalizedValue(sample[sample.Count - 1], this.min, this.max);
+            }
         }
         List<List<double>> convertTextToList(string[] text)
         {
@@ -32,10 +45,11 @@ namespace NeuralNetwork
         {
             var sample = new List<double>();
             string[] splitedSample = row.Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach(string value in splitedSample)
+            for (int i = 0; i < splitedSample.Length; i++)
             {
-                double data = double.Parse(value);
+                double data = double.Parse(splitedSample[i]);
                 sample.Add(data);
+                if (i == splitedSample.Length - 1) this.decisions.Add(data);
             }
             return sample;
         }

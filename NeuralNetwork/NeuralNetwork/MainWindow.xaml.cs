@@ -62,6 +62,8 @@ namespace NeuralNetwork
                 return;
             }
             learning = new Learning(learningSamples);
+            learningSamplesStatus.Content = "Próbki załadowane";
+            denormalizationBox.Text = "Min = " + learning.min.ToString() + " Max = " + learning.max.ToString();
         }
         private void createNetworkBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -72,6 +74,8 @@ namespace NeuralNetwork
             }
             configuration = new Configuration(configurationBox.Text);
             network = new Network(configuration);
+            weightsLoaded = false;
+            weightsStatus.Content = "Wagi nie załadowane";
             networkStatus.Content = "Sieć utworzona";
         }
         private void loadWeightsBtn_Click(object sender, RoutedEventArgs e)
@@ -107,7 +111,11 @@ namespace NeuralNetwork
         }
         private void saveWeightsBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!weightsLoaded)
+            {
+                savingStatus.Content = "Brak wag do zapisania";
+                return;
+            }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.CurrentDirectory;
             saveFileDialog.Filter = "txt files (*.txt)|*.txt";
@@ -183,6 +191,7 @@ namespace NeuralNetwork
                 learningStatus.Content = "Poczekaj na zakończenie procesu uczenia";
                 return;
             }
+            progressBar.Visibility = Visibility.Visible;
             worker.RunWorkerAsync();
 
         }
@@ -194,7 +203,12 @@ namespace NeuralNetwork
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar.Value = e.ProgressPercentage;
-            if (progressBar.Value == 100) learningStatus.Content = "Uczenie zakończone";
+            if (progressBar.Value == 100)
+            {
+                learningStatus.Content = "Uczenie zakończone";
+                progressBar.Visibility = Visibility.Hidden;
+            }
+
         }
         private void outputBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -213,9 +227,22 @@ namespace NeuralNetwork
                 resultBox.Text = inputMessage;
                 return;
             }
+            if(!FormValidation.isMinValid(minBox, out string minMessage)){
+                resultBox.Text = minMessage;
+                return;
+            }
+            if (!FormValidation.isMaxValid(minBox, out string maxMessage))
+            {
+                resultBox.Text = maxMessage;
+                return;
+            }
+            double min = double.Parse(minBox.Text);
+            double max = double.Parse(maxBox.Text);
             double inputBeta = double.Parse(inputBetaBox.Text);
             var inputs = Tools.convertStringToDoubleList(inputBox.Text);
-            resultBox.Text = network.calculateOutput(inputs, inputBeta).ToString();
+            double output = network.calculateOutput(inputs, inputBeta);
+            double denormalizedOutput = Tools.getDenormalizedValue(output, min, max);
+            resultBox.Text = denormalizedOutput.ToString();
         }
     }
 }
