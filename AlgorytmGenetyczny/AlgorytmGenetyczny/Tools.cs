@@ -9,9 +9,18 @@ namespace AlgorytmGenetyczny
 {
     class Tools
     {
-        public static double adaptationFunction(double x1, double x2)
+        //public static double adaptationFunction(double x1, double x2)
+        //{
+        //    return Math.Sin(x1 * 0.05) + Math.Sin(x2 * 0.05) + 0.4 * Math.Sin(x1 * 0.15) * Math.Sin(x2 * 0.15);
+        //}
+        public static double adaptationFunction(List<double[]>expectedReceivedList)
         {
-            return Math.Sin(x1 * 0.05) + Math.Sin(x2 * 0.05) + 0.4 * Math.Sin(x1 * 0.15) * Math.Sin(x2 * 0.15);
+            double result=0;
+            foreach(var valuePair in expectedReceivedList)
+            {
+                result += Math.Pow((valuePair[0] - valuePair[1]), 2);
+            }
+            return result;
         }
         public static int randomZeroOrOne()
         {

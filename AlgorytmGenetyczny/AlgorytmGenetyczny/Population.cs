@@ -16,6 +16,7 @@ namespace AlgorytmGenetyczny
         }
         public void generateRandomPopulation()
         {
+            this.population.Clear();
             for (int i = 0; i < populationSize; i++)
             {
                 Individual individual = Individual.getRandomIndividual();
@@ -38,7 +39,7 @@ namespace AlgorytmGenetyczny
             foreach(Individual competitor in competitors)
             {
                 competitor.calculateAdaptation();
-                if (competitor.adaptationFunctionResult > selected.adaptationFunctionResult) selected = competitor;
+                if (competitor.adaptationFunctionResult < selected.adaptationFunctionResult) selected = competitor;
             }
             return selected;
         }
@@ -72,7 +73,7 @@ namespace AlgorytmGenetyczny
         public void mutateOneChromosome()
         {
             int[] selectedToMutate = Tools.getRandomIndexes(mutationRate, this.population.Count);
-            for (int i = 0; i < population.Count; i++)
+            for (int i = 0; i < this.population.Count; i++)
             {
                 if (selectedToMutate[i] == 1) this.population[i].changeChromosome();
             }
@@ -82,7 +83,7 @@ namespace AlgorytmGenetyczny
             Individual selected = this.population.First().copy();
             foreach(Individual individual in this.population)
             {
-                if (individual.adaptationFunctionResult > selected.adaptationFunctionResult) selected = individual;
+                if (individual.adaptationFunctionResult < selected.adaptationFunctionResult) selected = individual;
             }
             return selected;
         }

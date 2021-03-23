@@ -42,9 +42,20 @@ namespace AlgorytmGenetyczny
         }
         public void calculateAdaptation()
         {
-            double x1 = Encoder.decode(this.DNA[0], minParameterValue, maxParameterValue);
-            double x2 = Encoder.decode(this.DNA[1], minParameterValue, maxParameterValue);
-            this.adaptationFunctionResult = Tools.adaptationFunction(x1, x2);
+            var expectedReceivedList = new List<double[]>();
+            for (int i = 0; i < this.DNA.Count; i++)
+            {
+                network.setWeights(i / 3, i % 3, Encoder.decode(DNA[i], minParameterValue, maxParameterValue));
+            }
+            double resultSample1 = network.calculateOutput(xorSample1[0], xorSample1[1]);
+            double resultSample2 = network.calculateOutput(xorSample2[0], xorSample2[1]);
+            double resultSample3 = network.calculateOutput(xorSample3[0], xorSample3[1]);
+            double resultSample4 = network.calculateOutput(xorSample4[0], xorSample4[1]);
+            expectedReceivedList.Add(new double []{ xorSample1[2], resultSample1});
+            expectedReceivedList.Add(new double[] { xorSample2[2], resultSample2 });
+            expectedReceivedList.Add(new double[] { xorSample3[2], resultSample3 });
+            expectedReceivedList.Add(new double[] { xorSample4[2], resultSample4 });
+            this.adaptationFunctionResult = Tools.adaptationFunction(expectedReceivedList);
         }
         public void changeChromosome()
         {
@@ -63,7 +74,7 @@ namespace AlgorytmGenetyczny
                 {
                     individual += DNA[i][j];
                 }
-                individual += ", ";
+                individual += " "+ Math.Round(Encoder.decode(DNA[i], minParameterValue, maxParameterValue),2)+", ";
             }
             individual += ", RESULT: " + Math.Round(this.adaptationFunctionResult,3);
             return individual;
